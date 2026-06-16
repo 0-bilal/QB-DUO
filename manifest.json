@@ -3,25 +3,25 @@
   "name": "QB-Sentinel",
   "icons": [
     {
-      "src": "ico/logo.png",
+      "src": "ico/QB-Sentinel-Logo.png",
       "type": "image/png",
       "sizes": "192x192",
       "purpose": "any"
     },
     {
-      "src": "ico/logo.png",
+      "src": "ico/QB-Sentinel-Logo.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "any"
     },
     {
-      "src": "ico/logo.png",
+      "src": "ico/QB-Sentinel-Logo.png",
       "type": "image/png",
       "sizes": "192x192",
       "purpose": "maskable"
     },
     {
-      "src": "ico/logo.png",
+      "src": "ico/QB-Sentinel-Logo.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "maskable"
