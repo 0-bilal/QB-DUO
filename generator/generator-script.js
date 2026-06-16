@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function localBranchName(id) {
         const m = {
             Muzahmiyah: 'المزاحمية', muzahmiyah: 'المزاحمية',
-            Dawadimi:   'الدوادمي',  dawadimi:   'الدوادمي',
+            Shawqiyah:   'الشوقية',  Shawqiyah:   'الشوقية',
         };
         return m[id] || id;
     }

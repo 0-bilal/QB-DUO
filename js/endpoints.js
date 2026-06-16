@@ -13,13 +13,13 @@
     CPV:       'https://script.google.com/macros/s/AKfycbxxp3azw2izwMptP4mnXiHP60bJW8RqA6vbNRdaF7oROolvdMgjpnx5l-JoC2AgaF_2yA/exec', // سند صرف نقدية
     PCR:       'https://script.google.com/macros/s/AKfycbzqHOrzlIzlY81FMS7dYsmSfXtuYixKXVkbQK1wIXjN9ndrNnmm7-LZDeFGcwnV767LuQ/exec', // طلب عهدة
     EDR:       'https://script.google.com/macros/s/AKfycbyFPschAXnLhXweuYS_LAQwPQZje3Cj2MbXLWa8q5ZE6JSDdYP0h4ytam8gAJqaT-r4wA/exec', // تقرير نهاية اليوم
-    ATT:       'https://script.google.com/macros/s/AKfycbzml7Jtqe04rsRp3CfFrpZBl3Sd7WjzyojKGg8sAlQYKK4LOFbAFH3hzWdTISO1nKBkng/exec', // حضور وانصراف الموظفين
+    ATT:       'https://script.google.com/macros/s/AKfycbxaqGnpFTAlvL9idkxT3YuRB2Vef2rGMyqUmhi_n4PLw1xQLyjpFX-W-FG_LoSmjPG1RA/exec', // حضور وانصراف الموظفين
     RMM:       'https://script.google.com/macros/s/AKfycbx8Y6u3MyZ647BXc0tyUb76mbcg72a4JuyFVeo548dl8utW1UKm8k0kK6rzIIC81or8/exec', // سجل التصنيع اليومي
     ECL:       'https://script.google.com/macros/s/AKfycbxqxwJ5CBwjPSX-8CZSLVOSz5k7eOyd95mPOHGXXWo_Q_Gb7PgJUVizv_vTqIVqJ7CcIA/exec', // سجل تنظيف المعدات
     FIL:       'https://script.google.com/macros/s/AKfycbyNsR7s7fmTsyEUarjdpoYSbO52M0cfniWjIh65EwuyUexaI15WM4yezdZ4ZgBaEYVIsg/exec', // قائمة فحص جودة الفاكهة
     RSL:       'https://script.google.com/macros/s/AKfycbzacdBP4dX9OjD4Pv5iypqwIqCsm6gmJzaBasB1Xtpy6A7BrsTGCBdx-rIlZIXn3ehJSA/exec', // سجل معايرة المكونات
     RFM:       'https://script.google.com/macros/s/AKfycbzjXFwmL4kbJ-1e2hKOFU_iCBU6DKD0Jz4N5p5ISdHgpmdGWTsaKFy_HUQGnztH9u9MDg/exec',  // طلب توريد مواد
-    GENERATOR: 'https://script.google.com/macros/s/AKfycbwGpMtn5R96F1e9qbGonE_neD8X3k7_9epv2Xiflu7Aq3EKqjUDGnmuh93tDyUTamFc/exec', 
+    GENERATOR: 'https://script.google.com/macros/s/AKfycbxaqGnpFTAlvL9idkxT3YuRB2Vef2rGMyqUmhi_n4PLw1xQLyjpFX-W-FG_LoSmjPG1RA/exec', 
   };
 
   /**
