@@ -1,0 +1,397 @@
+/* ═══════════════════════════════════════════════════════════════
+   MVR-style.css — مراجعة الفروع الشهرية (Monthly Video Review)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── بطاقة التعليمات ───────────────────────────────────────────────────── */
+
+.instructions-card {
+    background: var(--card-bg, #ffffff);
+    margin-top: 16px;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+}
+
+.instructions-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+
+.instructions-header .header-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: rgba(var(--primary-rgb, 220,38,38), 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary, #dc2626);
+    flex-shrink: 0;
+}
+
+.instructions-header .header-text h3 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary, #000000);
+}
+
+.instructions-header .header-text small {
+    font-size: 11px;
+    color: var(--text-secondary, #aaa);
+    letter-spacing: 0.5px;
+}
+
+/* ── قائمة الخطوات ───────────────────────────────────────────────────── */
+
+.steps-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.step-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    position: relative;
+}
+
+.step-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.step-number {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    background: var(--accent, #fff5f5);
+    color: var(--primary, #c62828);
+    border: 1px solid rgba(198, 40, 40, 0.2);
+}
+
+.step-line {
+    width: 2px;
+    flex-grow: 1;
+    background: linear-gradient(to bottom, rgba(198, 40, 40, 0.2), transparent);
+    margin-top: 8px;
+    min-height: 20px;
+}
+
+.step-body {
+    flex: 1;
+    padding-bottom: 8px;
+}
+
+.step-body p {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-dark, #2d2e32);
+}
+
+.step-body small {
+    font-size: 10.5px;
+    color: var(--text-light, #6b7280);
+    text-transform: uppercase;
+}
+
+/* ── بطاقة التسجيل ──────────────────────────────────────────────────────── */
+
+.video-card {
+    background: var(--card-bg, #ffffff);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 16px;
+}
+
+.video-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 20px 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.video-card-header .vc-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    background: rgba(var(--primary-rgb, 220,38,38), 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary, #dc2626);
+}
+
+.video-card-header h3 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary, #000000);
+}
+
+.video-card-header small {
+    font-size: 11px;
+    color: var(--text-secondary, #999);
+}
+
+/* ── حالة الخمول (idle) ────────────────────────────────────────────────── */
+
+#mvr-state-idle {
+    padding: 32px 20px;
+    text-align: center;
+}
+
+.idle-trigger {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    padding: 28px 40px;
+    border-radius: 16px;
+    border: 2px dashed rgba(var(--primary-rgb, 220,38,38), 0.35);
+    background: rgba(var(--primary-rgb, 220,38,38), 0.05);
+    transition: all 0.2s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.idle-trigger:hover,
+.idle-trigger:active {
+    border-color: var(--primary, #dc2626);
+    background: rgba(var(--primary-rgb, 220,38,38), 0.10);
+}
+
+.idle-trigger .trigger-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: rgba(var(--primary-rgb, 220,38,38), 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary, #dc2626);
+}
+
+.idle-trigger .trigger-icon svg,
+.idle-trigger .trigger-icon i {
+    width: 28px;
+    height: 28px;
+}
+
+.idle-trigger p {
+    margin: 0 0 2px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary, #000000);
+}
+
+.idle-trigger small {
+    font-size: 12px;
+    color: var(--text-secondary, #aaa);
+}
+
+/* ── حالة التسجيل (recording) ────────────────────────────────────────── */
+
+#mvr-state-recording {
+    position: relative;
+    background: #000;
+}
+
+#mvrLiveVideo {
+    width: 100%;
+    display: block;
+    max-height: 360px;
+    object-fit: cover;
+    background: #000;
+}
+
+.recording-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 14px;
+    pointer-events: none;
+}
+
+.rec-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0,0,0,0.65);
+    backdrop-filter: blur(6px);
+    border-radius: 20px;
+    padding: 5px 12px 5px 10px;
+    align-self: flex-start;
+}
+
+.rec-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ef4444;
+    animation: recPulse 1.2s ease-in-out infinite;
+    flex-shrink: 0;
+}
+
+@keyframes recPulse {
+    0%, 100% { opacity: 1;   transform: scale(1); }
+    50%       { opacity: 0.4; transform: scale(0.8); }
+}
+
+.rec-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 1px;
+}
+
+#mvrTimer {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    font-variant-numeric: tabular-nums;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+}
+
+.recording-controls {
+    pointer-events: all;
+    display: flex;
+    justify-content: center;
+    padding: 14px;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+}
+
+.stop-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #ef4444;
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 28px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.stop-btn:hover { background: #dc2626; }
+
+.stop-btn svg, .stop-btn i { width: 18px; height: 18px; }
+
+/* ── حالة المراجعة (review) ──────────────────────────────────────────── */
+
+#mvr-state-review {
+    padding: 20px;
+}
+
+#mvrReviewVideo {
+    width: 100%;
+    border-radius: 12px;
+    display: block;
+    background: #000;
+    max-height: 360px;
+    object-fit: contain;
+    margin-bottom: 14px;
+}
+
+.review-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.review-keep-btn,
+.review-discard-btn {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.review-keep-btn {
+    background: rgba(34,197,94,0.15);
+    color: #22c55e;
+    border: 1px solid rgba(34,197,94,0.3);
+}
+
+.review-keep-btn:hover { opacity: 0.8; }
+
+.review-discard-btn {
+    background: rgba(239,68,68,0.12);
+    color: #ef4444;
+    border: 1px solid rgba(239,68,68,0.25);
+}
+
+.review-discard-btn:hover { opacity: 0.8; }
+
+.review-keep-btn svg, .review-keep-btn i,
+.review-discard-btn svg, .review-discard-btn i {
+    width: 16px;
+    height: 16px;
+}
+
+.review-info {
+    font-size: 12px;
+    color: var(--text-secondary, #999);
+    text-align: center;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.review-info svg, .review-info i { width: 13px; height: 13px; }
+
+/* ── شريط التقدم في المودال ── */
+.modal-progress-container {
+    width: 100%;
+    background: #f0f0f0;
+    border-radius: 10px;
+    height: 10px;
+    margin: 20px 0;
+    overflow: hidden;
+    border: 1px solid #eee;
+}
+
+.modal-progress-bar {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #c62828, #ef4444);
+    transition: width 0.3s ease;
+    box-shadow: 0 0 10px rgba(198, 40, 40, 0.3);
+}
+
+.modal-loader.hidden, 
+.modal-progress-container.hidden { display: none; }

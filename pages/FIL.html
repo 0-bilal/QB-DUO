@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>قائمة فحص جودة الفاكهة | FIL</title>
+    <link rel="stylesheet" href="../css/notifications.css">
+    <link rel="stylesheet" href="../reports/FIL/FIL-style.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="icon" type="image/x-icon" href="../ico/logo.ico">
+</head>
+<body>
+
+<div id="customModal" class="modal-overlay hidden">
+    <div class="modal-content">
+        <div id="modalIcon" class="modal-icon"></div>
+        <h3 id="modalTitle"></h3>
+        <p id="modalMessage"></p>
+        <div id="modalLoader" class="modal-loader hidden"></div>
+        <button id="modalClose" class="modal-btn hidden">موافق / OK</button>
+    </div>
+</div>
+
+<div class="form-container">
+    <header class="main-header">
+        <div class="header-overlay"></div>
+        <div class="logo-area">
+
+<div class="logo-area">
+    <div class="header-actions-top">
+        
+        <button id="notificationsBtn" class="notification-btn" title="الإشعارات">
+        <i data-lucide="bell"></i>
+        <span class="notification-dot"></span>
+        </button>
+
+        <button id="refreshApp" class="refresh-btn" title="تحديث النظام">
+            <i data-lucide="refresh-cw"></i>
+        </button>
+    </div>
+
+            <img src="../ico/logo.ico" alt="Logo" class="logo">
+            <h1>قائمة فحص جودة الفاكهة</h1>
+            <p class="en-sub-header">FRUIT QUALITY CHECKLIST
+            </p>
+        </div>
+    </header>
+
+    <form id="cleaningReportForm" novalidate>
+        <div class="card info-card">
+            <p class="description">سجل رقمي لتوثيق عمليات الجودة للفاكهة، تهدف إلى ضمان أعلى مستويات السلامة الغذائية والالتزام بالمعايير التشغيلية</p>
+            <p class="description en-text"></p>
+            <div class="required-indicator"></div>
+        </div>
+
+                    <div class="back-nav">
+    <a href="../index.html" class="back-btn">
+        <i data-lucide="arrow-right"></i>
+        <span>العودة للقائمة الرئيسية</span>
+        <small>Return</small>
+    </a>
+   </div>
+
+        <div class="card" id="branchCard">
+            <label class="label-heading">اختيار الفرع / Select Branch <span class="required">*</span></label>
+            <div class="branch-grid">
+                <input type="radio" id="branch1" name="branch" value="Dawadimi" required>
+                <label for="branch1" class="branch-tile">
+                    <i data-lucide="map-pin"></i>
+                    <div class="tile-text">
+                        <span>الدوادمي</span>
+                        <small>Al-Dawadimi</small>
+                    </div>
+                </label>
+
+                <input type="radio" id="branch2" name="branch" value="Muzahmiyah">
+                <label for="branch2" class="branch-tile">
+                    <i data-lucide="map-pin"></i>
+                    <div class="tile-text">
+                        <span>المزاحمية</span>
+                        <small>Al-Muzahmiyah</small>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <div class="card" id="idCard">
+            <label class="label-heading">رقم الموظف للتحقق / Employee ID <span class="required">*</span></label>
+            <div class="modern-input">
+                <i data-lucide="hash"></i>
+                <input type="number" id="employeeId" placeholder="ID Number" required>
+            </div>
+        </div>
+
+        <!-- بطاقة الجلسة الحالية -->
+        <div id="savedInfo" class="card hidden">
+            <label class="label-heading">معلومات الموظف / Employee Information</label>
+            <div class="user-badge">
+                <div class="badge-icon">
+                    <i data-lucide="user-check"></i>
+                </div>
+                <div class="badge-details">
+                    <span id="displayUser" class="badge-name"></span>
+                    <small id="displayBranch" class="badge-branch"></small>
+                </div>
+            </div>
+            <button type="button" id="resetBtn" class="reset-link">
+                <i data-lucide="refresh-cw"></i>
+                تغيير / Change
+            </button>
+        </div>
+
+<form id="fruitReportForm" novalidate> 
+    <div class="card" id="fruitCheckCard">
+        <label class="label-heading">قائمة فحص الفواكه / Fruit Checklist <span class="required">*</span></label>
+        <div id="fruitGrid" class="fruit-management-grid"></div>
+    </div>
+
+    </form>
+
+        <form id="fruitReportForm" novalidate> 
+    <div class="card hidden" id="photoCard">
+        <label class="label-heading">التوثيق بالصورة للفواكه التالفة / Photo Evidence <span class="required">*</span></label>
+        <div class="camera-wrapper">
+            <label for="cameraInput" class="camera-trigger" id="dropArea">
+                <div class="icon-circle">
+                    <i data-lucide="camera"></i>
+                </div>
+                <p>التقط صورة للفواكه التالفة</p>
+                <small>Take a Photo of Damaged Fruits</small>
+                <input type="file" id="cameraInput" accept="image/*" capture="environment" hidden>
+            </label>
+            
+            <div id="imagePreviewContainer" class="hidden">
+                <div class="preview-frame">
+                    <img id="imagePreview" src="" alt="Preview">
+                    <button type="button" id="removeImage" class="remove-overlay">
+                        <i data-lucide="x-circle"></i> حذف وإعادة التصوير
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="actions">
+        <button type="submit" class="submit-btn" id="submitBtn">
+            <span class="btn-content">
+                <i data-lucide="check-circle"></i>
+                إرسال التقرير / Submit
+            </span>
+        </button>
+    </div>
+</form>
+
+<div id="customModal" class="modal-overlay hidden">
+    <div class="modal-content">
+        <div id="modalIcon" class="modal-icon"></div>
+        <h3 id="modalTitle"></h3>
+        <p id="modalMessage"></p>
+        <div id="modalLoader" class="modal-loader hidden"></div>
+        <button id="modalClose" class="modal-btn">موافق / OK</button>
+    </div>
+</div>
+
+
+<footer class="developer-footer">
+    <div class="dev-card">
+        <div class="dev-card-content">
+            <div class="dev-header">
+                <i data-lucide="code-2" class="dev-icon"></i>
+                <span class="project-name">QB-Sentinel</span>
+            </div>
+            <p class="dev-text">
+                 التطوير <strong>بلال الخواجة</strong> 
+                <span class="brand-text">من ضمن برمجيات QB</span>
+            </p>
+            <div class="client-info">
+                <i data-lucide="warehouse" class="client-icon"></i>
+                <span>مقدم إلى عصير تايم (الدوادمي & المزاحمية)</span>
+            </div>
+            <div class="version-badge">
+                <span class="version-label">Version</span>
+                <span class="version-number">v0.0.0 </span>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="../js/endpoints.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/session.js"></script>
+<script src="../js/common.js"></script>
+<script src="../reports/FIL/FIL-notifications.js"></script>
+<script src="../reports/FIL/FIL-camera.js"></script>
+<script src="../reports/FIL/FIL-script.js"></script>
+<script src="../js/versions.js"></script>
+
+<script>lucide.createIcons();</script>
+</body>
+</html>

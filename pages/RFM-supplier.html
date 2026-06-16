@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RFM | Supply توريد </title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" type="image/x-icon" href="../ico/logo.ico">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+    <style>
+        /* ── ثنائية اللغة — عربي + إنجليزي أصغر تحته ── */
+        .bi { display: flex; flex-direction: column; gap: 1px; }
+        .bi .ar  { font-weight: 700; color: var(--text-dark); }
+        .bi .en  { font-size: 10px; color: var(--text-light); letter-spacing: 0.3px; }
+
+        /* ── بطاقات المواد — نفس نمط الموظف ── */
+        .sup-mat-list { display: flex; flex-direction: column; gap: 8px; }
+        .sup-mat-card {
+            background: #fafafa;
+            border: 1.5px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+            position: relative;
+        }
+        .sup-mat-card::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, var(--primary), transparent);
+        }
+        .sup-mat-head {
+            display: flex; align-items: center; gap: 10px;
+            padding: 13px 14px;
+        }
+        .sup-mat-icon {
+            width: 38px; height: 38px; border-radius: 10px;
+            background: linear-gradient(135deg, #fff5f5, #ffe8e8);
+            border: 1px solid rgba(198,40,40,0.12);
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .sup-mat-icon i { width: 18px; height: 18px; color: var(--primary); }
+        .sup-mat-names { flex: 1; min-width: 0; }
+        .sup-mat-names .ar { font-size: 14px; font-weight: 700; }
+        .sup-mat-names .en { font-size: 11px; color: var(--text-light); }
+        .sup-mat-qty {
+            display: flex; flex-direction: column; align-items: flex-end; gap: 2px;
+            flex-shrink: 0;
+        }
+        .sup-mat-qty .qty-val {
+            font-size: 16px; font-weight: 700; color: var(--primary);
+        }
+        .sup-mat-qty .qty-unit {
+            font-size: 10px; color: var(--text-light);
+        }
+        .qty-requested-badge {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white; border-radius: 10px;
+            padding: 6px 12px; text-align: center;
+            margin: 0 14px 12px;
+        }
+        .qty-requested-badge .label-ar { font-size: 12px; font-weight: 700; }
+        .qty-requested-badge .label-en { font-size: 9px; opacity: 0.8; margin-top: 1px; }
+        .qty-requested-badge .value    { font-size: 18px; font-weight: 800; margin-top: 3px; }
+        .qty-requested-badge .unit-bi  { font-size: 11px; opacity: 0.85; }
+
+        /* ── أزرار القرار ── */
+        .decision-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 18px; }
+        .btn-approve {
+            padding: 18px 10px; border: none; border-radius: 12px;
+            background: linear-gradient(135deg, #2e7d32, #1b5e20);
+            color: white; cursor: pointer; transition: all 0.25s;
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
+        }
+        .btn-reject {
+            padding: 18px 10px; border: none; border-radius: 12px;
+            background: linear-gradient(135deg, #c62828, #8e0000);
+            color: white; cursor: pointer; transition: all 0.25s;
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
+        }
+        .btn-approve:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(46,125,50,0.35); }
+        .btn-reject:hover  { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(198,40,40,0.35); }
+        .btn-approve i, .btn-reject i { width: 22px; height: 22px; }
+        .btn-label-ar { font-size: 14px; font-weight: 700; }
+        .btn-label-en { font-size: 10px; opacity: 0.8; font-weight: 400; }
+
+        /* ── رفض ── */
+        .reject-area {
+            background: #ffebee; border: 1.5px solid #ef9a9a;
+            border-radius: 12px; padding: 16px; margin-top: 14px; display: none;
+        }
+        .reject-area .bi { margin-bottom: 10px; }
+        .reject-area textarea {
+            width: 100%; padding: 12px; border: 1.5px solid #ef9a9a;
+            border-radius: 8px; font-size: 14px; font-family: inherit;
+            resize: vertical; min-height: 80px; outline: none; box-sizing: border-box;
+        }
+        .reject-area textarea:focus { border-color: var(--primary); }
+        .btn-confirm-reject {
+            width: 100%; margin-top: 10px; padding: 13px;
+            background: var(--primary); color: white; border: none;
+            border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer;
+        }
+
+        /* ── رفع الملف بعد الاعتماد ── */
+        .upload-section {
+            display: none; margin-top: 16px;
+            background: #f0fdf4; border: 1.5px solid #a5d6a7;
+            border-radius: 14px; padding: 16px;
+        }
+        .upload-section .bi { margin-bottom: 14px; }
+        .upload-section .bi .ar { color: #2e7d32; }
+        .upload-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .btn-cam {
+            padding: 16px 10px; border: 2px solid #a5d6a7;
+            border-radius: 12px; background: white;
+            cursor: pointer; text-align: center; transition: all 0.25s;
+            display: flex; flex-direction: column; align-items: center; gap: 6px;
+        }
+        .btn-cam:hover { border-color: #2e7d32; background: #f0fdf4; }
+        .btn-cam i { width: 26px; height: 26px; color: #2e7d32; }
+        .btn-cam .btn-label-ar { font-size: 13px; font-weight: 700; color: #2e7d32; }
+        .btn-cam .btn-label-en { font-size: 10px; color: var(--text-light); }
+
+        /* preview صورة */
+        .photo-preview {
+            margin-top: 12px; border-radius: 12px; overflow: hidden;
+            border: 2px solid #a5d6a7; display: none; position: relative;
+        }
+        .photo-preview img { width: 100%; display: block; max-height: 240px; object-fit: cover; }
+        .photo-preview-actions {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            background: rgba(0,0,0,0.6); padding: 10px; text-align: center;
+        }
+        .btn-retake {
+            background: none; border: 1px solid rgba(255,255,255,0.6);
+            color: white; padding: 6px 16px; border-radius: 8px;
+            font-size: 12px; cursor: pointer;
+        }
+
+        /* gallery file input */
+        .btn-gallery { display: none; }
+
+        .btn-submit-approval {
+            width: 100%; margin-top: 14px; padding: 16px;
+            background: linear-gradient(135deg, #2e7d32, #1b5e20);
+            color: white; border: none; border-radius: 12px;
+            font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.25s;
+            box-shadow: 0 6px 18px rgba(46,125,50,0.3);
+        }
+        .btn-submit-approval:hover { transform: translateY(-2px); }
+        .btn-submit-approval:disabled { opacity: 0.6; transform: none; cursor: not-allowed; }
+        .upload-note {
+            text-align: center; font-size: 11px;
+            color: var(--text-light); margin-top: 8px;
+        }
+
+        /* ── حالات الموافقة/الرفض ── */
+        .status-banner { text-align: center; padding: 24px; border-radius: 14px; }
+        .status-banner.approved { background: #e8f5e9; border: 1.5px solid #a5d6a7; }
+        .status-banner.rejected { background: #ffebee; border: 1.5px solid #ef9a9a; }
+        .status-emoji { font-size: 44px; margin-bottom: 10px; }
+        .status-title { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+        .status-sub { font-size: 12px; opacity: 0.7; }
+        .status-file-link { margin-top: 12px; }
+        .status-file-link a {
+            color: #2e7d32; font-size: 13px; font-weight: 700;
+            text-decoration: none; background: #f0fdf4;
+            padding: 8px 16px; border-radius: 8px; display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="customModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div id="modalIcon" class="modal-icon"></div>
+            <h3 id="modalTitle"></h3>
+            <div id="modalMessage" class="modal-message"></div>
+            <div id="modalLoader" class="modal-loader hidden"></div>
+            <button id="modalClose" class="modal-btn hidden">OK / موافق</button>
+        </div>
+    </div>
+
+    <div class="form-container">
+
+        <!-- Header — نفس هوية المشروع -->
+        <header class="main-header">
+            <div class="header-overlay"></div>
+            <div class="logo-area">
+                <img src="../ico/logo.ico" alt="Logo" class="logo">
+                <h1>طلب توريد مواد</h1>
+                <p class="en-sub-header">SUPPLY REQUEST — RFM</p>
+            </div>
+        </header>
+
+        <!-- Loading -->
+        <div id="loadingState" class="card" style="text-align:center;padding:36px 20px;">
+            <div class="modal-loader" style="display:block;margin:0 auto 14px;"></div>
+            <div class="bi" style="align-items:center;">
+                <span class="ar" style="font-size:14px;">جارٍ تحميل الطلب...</span>
+                <span class="en">Loading order data</span>
+            </div>
+        </div>
+
+        <!-- Error -->
+        <div id="errorState" class="card hidden" style="text-align:center;padding:28px;">
+            <p id="errorMsg" style="color:#f44336;font-weight:700;margin:0;"></p>
+        </div>
+
+        <!-- Main content -->
+        <div id="mainContent" class="hidden">
+
+            <!-- بيانات الطلب -->
+            <div class="card info-card">
+                <div class="title-row">
+                    <div class="bi">
+                        <span class="ar" id="trackIdDisplay" style="font-size:17px;color:var(--primary);">—</span>
+                        <span class="en" id="dateDisplay">—</span>
+                    </div>
+                    <div style="text-align:left;">
+                        <div class="bi" style="align-items:flex-end;">
+                            <span class="ar" style="font-size:13px;" id="branchDisplay">—</span>
+                            <span class="en" id="locationDisplay">—</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="user-badge" style="margin-top:14px;">
+                    <div class="badge-icon"><i data-lucide="building-2"></i></div>
+                    <div class="badge-details">
+                        <span class="badge-name" id="supplierNameDisplay">—</span>
+                        <small class="badge-branch">المورد / Supplier</small>
+                    </div>
+                </div>
+                <!-- مسؤول المشتريات -->
+                <div style="margin-top:12px;padding-top:12px;border-top:1px solid #f0f0f0;">
+                    <div style="font-size:11px;color:var(--text-light);margin-bottom:6px;font-weight:600;">
+                        مسؤول المشتريات / Purchasing Manager
+                    </div>
+                    <div style="display:flex;align-items:center;gap:10px;">
+                        <div style="width:32px;height:32px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(198,40,40,0.15);">
+                            <i data-lucide="user" style="width:16px;height:16px;color:var(--primary);"></i>
+                        </div>
+                        <div>
+                            <div style="font-weight:700;font-size:14px;" id="managerDisplay">—</div>
+                            <div style="font-size:12px;color:var(--primary);font-weight:600;" id="managerPhoneDisplay">—</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- المواد المطلوبة -->
+            <div class="card">
+                <div class="label-heading" style="display:flex;align-items:baseline;gap:8px;">
+                    <span>المواد المطلوبة</span>
+                    <small style="font-size:10px;color:var(--text-light);font-weight:400;text-transform:uppercase;letter-spacing:1px;">Requested Materials</small>
+                </div>
+                <div id="itemsContainer" class="sup-mat-list"></div>
+            </div>
+
+            <!-- بطاقة القرار -->
+            <div class="card" id="decisionCard">
+
+                <div id="pendingActions">
+                    <div class="label-heading" style="display:flex;align-items:baseline;gap:8px;">
+                        <span>قرارك</span>
+                        <small style="font-size:10px;color:var(--text-light);font-weight:400;text-transform:uppercase;letter-spacing:1px;">Your Decision</small>
+                    </div>
+
+                    <div class="decision-btns">
+                        <button class="btn-approve" id="approveBtn">
+                            <i data-lucide="check-circle"></i>
+                            <span class="btn-label-ar">اعتماد الطلب</span>
+                            <span class="btn-label-en">Approve Order</span>
+                        </button>
+                        <button class="btn-reject" id="rejectBtn">
+                            <i data-lucide="x-circle"></i>
+                            <span class="btn-label-ar">رفض الطلب</span>
+                            <span class="btn-label-en">Reject Order</span>
+                        </button>
+                    </div>
+
+                    <!-- سبب الرفض -->
+                    <div class="reject-area" id="rejectArea">
+                        <div class="bi">
+                            <span class="ar" style="font-size:14px;color:var(--primary);">سبب الرفض</span>
+                            <span class="en">Rejection Reason <span style="color:#c62828;">*</span></span>
+                        </div>
+                        <textarea id="rejectReason"
+                            placeholder="أدخل سبب الرفض... / Enter rejection reason..."></textarea>
+                        <button class="btn-confirm-reject" id="confirmRejectBtn">
+                            تأكيد الرفض / Confirm Rejection
+                        </button>
+                    </div>
+
+                    <!-- رفع الملف (بعد الاعتماد) -->
+                    <div class="upload-section" id="uploadSection">
+                        <div class="bi">
+                            <span class="ar" style="color:#2e7d32;">رفع عرض السعر أو الفاتورة</span>
+                            <span class="en">Upload price quote or invoice</span>
+                        </div>
+                        <div class="upload-btns">
+                            <button class="btn-cam" id="cameraBtn">
+                                <i data-lucide="camera"></i>
+                                <span class="btn-label-ar">تصوير</span>
+                                <span class="btn-label-en">Take Photo</span>
+                            </button>
+                            <label class="btn-cam" for="galleryInput">
+                                <i data-lucide="image"></i>
+                                <span class="btn-label-ar">المعرض / ملف</span>
+                                <span class="btn-label-en">Gallery / File</span>
+                            </label>
+                            <input type="file" id="galleryInput" accept="image/*,.pdf" class="btn-gallery">
+                        </div>
+
+                        <!-- معاينة الصورة -->
+                        <div class="photo-preview" id="photoPreview">
+                            <img id="photoPreviewImg" src="" alt="preview">
+                            <div class="photo-preview-actions">
+                                <button class="btn-retake" id="retakeBtn">
+                                    <i data-lucide="rotate-ccw" style="width:13px;height:13px;display:inline;margin-left:4px;"></i>
+                                    إعادة / Retake
+                                </button>
+                            </div>
+                        </div>
+
+                        <button class="btn-submit-approval" id="submitApprovalBtn">
+                            <i data-lucide="send" style="width:18px;height:18px;display:inline;margin-left:8px;"></i>
+                            إرسال الاعتماد / Submit Approval
+                        </button>
+                        <p class="upload-note">
+                            الملف اختياري — يمكن الاعتماد بدونه<br>
+                            File is optional — approval can be sent without it
+                        </p>
+                    </div>
+                </div>
+
+                <!-- تم الاعتماد -->
+                <div id="approvedState" class="status-banner approved hidden">
+                    <div class="status-emoji">✅</div>
+                    <div class="status-title" style="color:#2e7d32;">
+                        تم اعتماد الطلب<br>
+                        <small style="font-size:14px;font-weight:400;">Order Approved</small>
+                    </div>
+                    <div class="status-sub" id="approvedNote">تم إرسال اعتمادك للمسؤول</div>
+                    <div class="status-file-link" id="fileLink" style="display:none;"></div>
+                </div>
+
+                <!-- تم الرفض -->
+                <div id="rejectedState" class="status-banner rejected hidden">
+                    <div class="status-emoji">❌</div>
+                    <div class="status-title" style="color:#c62828;">
+                        تم رفض الطلب<br>
+                        <small style="font-size:14px;font-weight:400;">Order Rejected</small>
+                    </div>
+                    <div class="status-sub" id="rejectedNote"></div>
+                </div>
+
+            </div>
+
+        </div><!-- /#mainContent -->
+
+    </div><!-- /.form-container -->
+
+    <footer class="developer-footer">
+        <div class="dev-card">
+            <div class="dev-card-content">
+                <div class="dev-header">
+                    <i data-lucide="code-2" class="dev-icon"></i>
+                    <span class="project-name">QB-Sentinel</span>
+                </div>
+                <p class="dev-text">
+                    التطوير <strong>بلال الخواجة</strong>
+                    <span class="brand-text">من ضمن برمجيات QB</span>
+                </p>
+                <div class="client-info">
+                    <i data-lucide="warehouse" class="client-icon"></i>
+                    <span>مقدم إلى عصير تايم (الدوادمي & المزاحمية)</span>
+                </div>
+                <div class="version-badge">
+                    <span class="version-label">Version</span>
+                    <span class="version-number">v2.29.0</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/endpoints.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../reports/RFM/RFM-camera.js"></script>
+    <script src="../reports/RFM/RFM-supplier-script.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

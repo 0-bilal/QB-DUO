@@ -1,0 +1,318 @@
+/* QB-Sentinel System Variables */
+:root {
+    --primary: #c62828;
+    --primary-dark: #8e0000;
+    --accent: #fff5f5;
+    --text-dark: #2d2e32;
+    --text-light: #6b7280;
+    --border: #e5e7eb;
+    --radius: 12px;
+}
+
+/* Core Reset */
+* { 
+    box-sizing: border-box; 
+    -webkit-tap-highlight-color: transparent; 
+}
+
+body {
+    background-color: #f3f4f6;
+    margin: 0;
+    padding: 12px;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    color: var(--text-dark);
+}
+
+.form-container { 
+    max-width: 500px; 
+    margin: auto; 
+    animation: fadeIn 0.5s ease-out; 
+}
+
+@keyframes fadeIn { 
+    from { opacity: 0; transform: translateY(10px); } 
+    to { opacity: 1; transform: translateY(0); } 
+}
+
+/* Header Styling */
+.main-header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    padding: 30px 20px;
+    border-radius: var(--radius) var(--radius) 20px 20px;
+    text-align: center;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(198, 40, 40, 0.2);
+}
+
+
+.main-header h1 { font-size: 20px; margin: 0; position: relative; z-index: 2; }
+.en-sub-header { font-size: 10px; letter-spacing: 2px; opacity: 0.8; margin-top: 4px; }
+
+/* Back Navigation Button */
+.back-nav {
+    max-width: 500px;
+    margin: 15px auto 0;
+    padding: 0 5px;
+}
+
+
+
+/* Card Components */
+.card {
+    background: white;
+    margin-top: 15px;
+    padding: 20px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    transition: 0.3s;
+}
+
+.info-card { border-top: 6px solid var(--primary); }
+.label-heading { font-weight: 700; font-size: 15px; display: block; margin-bottom: 15px; }
+.description { font-size: 0.9rem; color: var(--text-dark); line-height: 1.5; margin: 0; }
+
+/* Branch Grid Selector */
+.branch-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.branch-grid input { display: none; }
+.branch-tile {
+    border: 2px solid var(--border);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.branch-grid input:checked + .branch-tile {
+    border-color: var(--primary);
+    background: var(--accent);
+    color: var(--primary);
+}
+
+/* Modern Input Fields */
+.modern-input {
+    display: flex;
+    align-items: center;
+    background: #f9fafb;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+}
+.modern-input:focus-within { border-color: var(--primary); background: white; }
+.modern-input i { color: var(--text-light); margin-left: 12px; width: 18px; }
+.modern-input input { border: none; background: transparent; width: 100%; font-size: 16px; outline: none; }
+
+/* Fruit Management Grid */
+.fruit-row {
+    background: #f9fafb;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 12px;
+}
+
+.fruit-info { margin-bottom: 10px; }
+.fruit-name { font-weight: bold; display: block; color: var(--text-dark); }
+.en-text { font-size: 0.75rem; color: var(--text-light); }
+
+.fruit-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.opt-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 4px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: white;
+    min-height: 75px;
+}
+
+.opt-label input { display: none; } /* إخفاء التشيك بوكس التقليدي */
+
+.lbl-ar { font-size: 13px; font-weight: 700; }
+.lbl-en { font-size: 9px; color: var(--text-light); text-transform: uppercase; margin-top: 2px; }
+
+/* Selection States */
+.opt-label:has(input:checked) {
+    background: var(--accent);
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.opt-label:has(input:checked) .lbl-en { color: var(--primary); opacity: 0.8; }
+
+/* Weight Input Styling */
+.damage-input-wrapper { margin-top: 12px; animation: fadeIn 0.3s; }
+.damage-input-wrapper .modern-input {
+    border: 1px solid var(--primary);
+    background: white;
+}
+.damage-input-wrapper i { color: var(--primary) !important; }
+
+/* Main Camera UI */
+.camera-trigger {
+    border: 2px dashed #d1d5db;
+    padding: 30px;
+    text-align: center;
+    border-radius: 15px;
+    cursor: pointer;
+    background: #fcfcfc;
+    display: block;
+    transition: 0.3s;
+}
+.camera-trigger:hover { border-color: var(--primary); background: var(--accent); }
+
+.icon-circle {
+    width: 60px; height: 60px; background: var(--accent); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; margin: 0 auto 15px;
+}
+.icon-circle i { color: var(--primary); width: 30px; height: 30px; }
+
+#imagePreviewContainer { margin-top: 15px; }
+.preview-frame { position: relative; border-radius: 15px; overflow: hidden; border: 2px solid var(--border); }
+#imagePreview { width: 100%; display: block; }
+
+.remove-overlay {
+    position: absolute; bottom: 0; left: 0; right: 0; padding: 15px;
+    background: rgba(0,0,0,0.7); color: white; border: none; cursor: pointer;
+    backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+
+/* Submit Actions */
+.actions { margin-top: 30px; padding-bottom: 20px; }
+.submit-btn {
+    width: 100%;
+    padding: 18px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    border: none;
+    border-radius: 15px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 20px rgba(198, 40, 40, 0.2);
+}
+
+.submit-btn:active {
+    transform: scale(0.98);
+    box-shadow: 0 5px 10px rgba(198, 40, 40, 0.2);
+}
+
+/* Global Utilities */
+.hidden { display: none !important; }
+
+/* Modal Styling */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+}
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+.modal-loader {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid var(--primary);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* أزرار الخيارات باللغتين */
+.opt-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.2;
+}
+.lbl-en {
+    font-size: 10px;
+    opacity: 0.8;
+    text-transform: uppercase;
+}
+
+/* ميزة عرض المزيد */
+.hidden-fruit {
+    display: none !important;
+}
+.show-more-btn {
+    width: 100%;
+    margin-top: 15px;
+    padding: 12px;
+    background: white;
+    border: 1.5px dashed var(--border);
+    border-radius: 10px;
+    color: var(--primary);
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: 0.3s;
+}
+.show-more-btn:hover {
+    background: var(--accent);
+    border-color: var(--primary);
+}
+
+/* علامة الحقل المطلوب */
+.req-star {
+    color: #ef4444;
+    margin-right: 4px;
+    font-weight: bold;
+}
+
+/* تمييز الصف غير المكتمل */
+.fruit-row.row-error {
+    border: 2px solid #ef4444 !important;
+    background-color: #fef2f2 !important;
+    animation: shake 0.4s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* تحسين شكل الأيقونات داخل الخيارات */
+.opt-label input[type="checkbox"]:checked + .opt-content {
+    color: var(--primary);
+}

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>مدير المشتريات | RFM</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" type="image/x-icon" href="../ico/logo.ico">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+    <style>
+        /* ── بطاقة الحالة ── */
+        .status-banner {
+            text-align: center;
+            padding: 22px 20px;
+            border-radius: 14px;
+            margin-top: 15px;
+        }
+        .status-banner.pending  { background: #fff3e0; border: 1.5px solid #ffcc80; }
+        .status-banner.approved { background: #e8f5e9; border: 1.5px solid #a5d6a7; }
+        .status-banner.rejected { background: #ffebee; border: 1.5px solid #ef9a9a; }
+        .status-icon { font-size: 40px; margin-bottom: 8px; }
+        .status-title { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+        .status-sub   { font-size: 13px; opacity: 0.7; }
+
+        /* ── أزرار الاعتماد / الرفض ── */
+        .decision-btns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        .btn-approve {
+            padding: 16px; border: none; border-radius: 12px;
+            background: linear-gradient(135deg, #2e7d32, #1b5e20);
+            color: white; font-size: 15px; font-weight: 700;
+            cursor: pointer; transition: all 0.25s;
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
+        }
+        .btn-reject {
+            padding: 16px; border: none; border-radius: 12px;
+            background: linear-gradient(135deg, #c62828, #8e0000);
+            color: white; font-size: 15px; font-weight: 700;
+            cursor: pointer; transition: all 0.25s;
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
+        }
+        .btn-approve:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(46,125,50,0.35); }
+        .btn-reject:hover  { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(198,40,40,0.35); }
+        .btn-approve:active, .btn-reject:active { transform: scale(0.97); }
+        .btn-approve i, .btn-reject i { width: 20px; height: 20px; }
+        .btn-sub { font-size: 10px; opacity: 0.8; font-weight: 400; }
+
+        /* ── منطقة الرفض ── */
+        .reject-area {
+            background: #ffebee;
+            border: 1.5px solid #ef9a9a;
+            border-radius: 12px;
+            padding: 18px;
+            margin-top: 15px;
+            display: none;
+        }
+        .reject-area label {
+            font-weight: 700; font-size: 14px; color: #c62828;
+            display: block; margin-bottom: 10px;
+        }
+        .reject-area textarea {
+            width: 100%; padding: 12px; border: 1.5px solid #ef9a9a;
+            border-radius: 8px; font-size: 14px; font-family: inherit;
+            resize: vertical; min-height: 80px; outline: none; box-sizing: border-box;
+            color: #2d2e32;
+        }
+        .reject-area textarea:focus { border-color: #c62828; }
+        .btn-confirm-reject {
+            width: 100%; margin-top: 12px; padding: 13px;
+            background: var(--primary); color: white; border: none;
+            border-radius: 10px; font-size: 15px; font-weight: 700;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .btn-confirm-reject:hover { opacity: 0.9; }
+
+        /* ── بطاقة المورد ── */
+        .supplier-section {
+            margin-bottom: 18px;
+        }
+        .supplier-header {
+            background: #f3f4f6;
+            padding: 10px 14px;
+            border-radius: 10px 10px 0 0;
+            border: 1px solid var(--border);
+            border-bottom: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+        .supplier-num {
+            background: var(--primary);
+            color: white;
+            padding: 2px 9px;
+            border-radius: 12px;
+            font-size: 11px;
+        }
+        .supplier-count {
+            margin-right: auto;
+            background: white;
+            border: 1px solid var(--border);
+            color: var(--text-light);
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+        }
+        .supplier-items {
+            border: 1px solid var(--border);
+            border-top: none;
+            border-radius: 0 0 10px 10px;
+            overflow: hidden;
+        }
+        .item-row {
+            padding: 11px 14px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .item-row:last-child { border-bottom: none; }
+        .item-name-ar { font-weight: 700; font-size: 13px; color: var(--text-dark); margin-bottom: 6px; }
+        .item-quantities {
+            display: flex; gap: 7px; flex-wrap: wrap; justify-content: flex-end;
+        }
+        .qty-badge-current {
+            background: #f3f4f6; color: #555;
+            padding: 3px 10px; border-radius: 20px; font-size: 11px;
+        }
+        .qty-badge-requested {
+            background: var(--primary); color: white;
+            padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Modal -->
+    <div id="customModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div id="modalIcon" class="modal-icon"></div>
+            <h3 id="modalTitle"></h3>
+            <div id="modalMessage" class="modal-message"></div>
+            <div id="modalLoader" class="modal-loader hidden"></div>
+            <button id="modalClose" class="modal-btn hidden">موافق / OK</button>
+        </div>
+    </div>
+
+    <div class="form-container">
+
+        <!-- Header -->
+        <header class="main-header">
+            <div class="header-overlay"></div>
+            <div class="logo-area">
+                <div class="header-actions-top">
+                    <a href="../about.html" class="notification-btn" style="text-decoration:none;">
+                        <img src="../ico/QB-Sentinel-Logo.ico" alt="QB" class="logo-QB">
+                    </a>
+                </div>
+                <img src="../ico/logo.ico" alt="Logo" class="logo">
+                <h1>مدير المشتريات</h1>
+                <p class="en-sub-header">PURCHASE REQUEST APPROVAL — RFM</p>
+            </div>
+        </header>
+
+        <!-- حالة التحميل -->
+        <div id="loadingState" class="card" style="text-align:center;padding:40px 20px;">
+            <div class="modal-loader" style="margin:0 auto 16px;display:block;width:40px;height:40px;border:4px solid #f3f3f3;border-top:4px solid var(--primary);border-radius:50%;animation:spin 1s linear infinite;"></div>
+            <p style="color:var(--text-light);margin:0;">جارٍ تحميل بيانات الطلب...</p>
+        </div>
+
+        <!-- حالة الخطأ -->
+        <div id="errorState" class="card hidden" style="text-align:center;padding:30px;">
+            <i data-lucide="alert-circle" style="width:40px;height:40px;color:#f44336;margin-bottom:12px;"></i>
+            <p id="errorMsg" style="color:#f44336;font-weight:700;margin:0;">تعذّر تحميل بيانات الطلب</p>
+        </div>
+
+        <!-- المحتوى الرئيسي -->
+        <div id="mainContent" class="hidden">
+
+            <!-- بطاقة معلومات الطلب -->
+            <div class="card info-card" id="orderInfoCard">
+                <div class="title-row">
+                    <div>
+                        <div class="label-heading" style="margin-bottom:2px;" id="trackIdDisplay">—</div>
+                        <div style="font-size:12px;color:var(--text-light);" id="dateDisplay">—</div>
+                    </div>
+                    <div style="text-align:left;">
+                        <div style="font-size:11px;color:var(--text-light);">الفرع</div>
+                        <div style="font-weight:700;font-size:14px;color:var(--primary);" id="branchDisplay">—</div>
+                    </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;margin-top:10px;">
+                    <div style="width:36px;height:36px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                        <i data-lucide="user" style="width:18px;height:18px;color:white;"></i>
+                    </div>
+                    <div>
+                        <div style="font-weight:700;font-size:14px;" id="employeeDisplay">—</div>
+                        <div style="font-size:11px;color:var(--text-light);">طالب التوريد / Employee</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- المواد مجمّعة حسب المورد -->
+            <div class="card" id="suppliersCard">
+                <label class="label-heading">المواد المطلوبة / Requested Materials</label>
+                <div id="suppliersContainer"></div>
+            </div>
+
+            <!-- الحالة / الاعتماد -->
+            <div class="card" id="decisionCard">
+
+                <!-- لم يتم اتخاذ قرار بعد -->
+                <div id="pendingActions">
+                    <label class="label-heading">قرار مسؤول المشتريات / Approval Decision</label>
+                    <div class="decision-btns">
+                        <button class="btn-approve" id="approveBtn">
+                            <i data-lucide="check-circle"></i>
+                            اعتماد الطلب
+                            <span class="btn-sub">Approve Request</span>
+                        </button>
+                        <button class="btn-reject" id="rejectBtn">
+                            <i data-lucide="x-circle"></i>
+                            رفض الطلب
+                            <span class="btn-sub">Reject Request</span>
+                        </button>
+                    </div>
+
+                    <!-- منطقة سبب الرفض -->
+                    <div class="reject-area" id="rejectArea">
+                        <label>سبب الرفض / Rejection Reason <span class="required">*</span></label>
+                        <textarea id="rejectReason" placeholder="أدخل سبب الرفض بوضوح..."></textarea>
+                        <button class="btn-confirm-reject" id="confirmRejectBtn">
+                            <i data-lucide="send" style="width:16px;height:16px;display:inline;margin-left:6px;"></i>
+                            تأكيد الرفض / Confirm Rejection
+                        </button>
+                    </div>
+                </div>
+
+                <!-- تم الاعتماد -->
+                <div id="approvedState" class="status-banner approved hidden">
+                    <div class="status-icon">✅</div>
+                    <div class="status-title" style="color:#2e7d32;">تم اعتماد الطلب</div>
+                    <div class="status-sub">تم إرسال الطلب للموردين</div>
+                </div>
+
+                <!-- تم الرفض -->
+                <div id="rejectedState" class="status-banner rejected hidden">
+                    <div class="status-icon">❌</div>
+                    <div class="status-title" style="color:#c62828;">تم رفض الطلب</div>
+                    <div class="status-sub" id="rejectionReasonDisplay"></div>
+                </div>
+
+            </div><!-- /#decisionCard -->
+
+        </div><!-- /#mainContent -->
+
+    </div><!-- /.form-container -->
+
+    <!-- Footer -->
+    <footer class="developer-footer">
+        <div class="dev-card">
+            <div class="dev-card-content">
+                <div class="dev-header">
+                    <i data-lucide="code-2" class="dev-icon"></i>
+                    <span class="project-name">QB-Sentinel</span>
+                </div>
+                <p class="dev-text">
+                    التطوير <strong>بلال الخواجة</strong>
+                    <span class="brand-text">من ضمن برمجيات QB</span>
+                </p>
+                <div class="client-info">
+                    <i data-lucide="warehouse" class="client-icon"></i>
+                    <span>مقدم إلى عصير تايم (الدوادمي & المزاحمية)</span>
+                </div>
+                <div class="version-badge">
+                    <span class="version-label">Version</span>
+                    <span class="version-number">v2.29.0</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/endpoints.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../reports/RFM/RFM-manager-script.js"></script>
+    <style>@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}</style>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

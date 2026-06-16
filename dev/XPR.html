@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>حالة النظام | QB-Sentinel</title>
+    <link rel="icon" type="image/x-icon" href="../../ico/logo.ico">
+    <style>
+        :root {
+            --primary: #c62828;
+            --primary-dark: #8e0000;
+            --accent: #fff5f5;
+            --text-dark: #2d2e32;
+            --text-light: #6b7280;
+            --border: #e5e7eb;
+            --white: #ffffff;
+            --radius: 16px;
+            --shadow: 0 10px 25px rgba(198, 40, 40, 0.1);
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            background-color: #f8fafc;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .status-card {
+            background: var(--white);
+            width: 90%;
+            max-width: 450px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            text-align: center;
+            position: relative;
+            border: 1px solid var(--border);
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* الجزء العلوي الملون */
+        .status-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            padding: 50px 20px;
+            color: #c62828;
+            position: relative;
+        }
+
+        .status-header::after {
+            content: "";
+            position: absolute;
+            bottom: -20px;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: var(--white);
+            border-radius: 50% 50% 0 0;
+        }
+
+        .icon-circle {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 2;
+        }
+
+        .icon-circle i {
+            width: 40px;
+            height: 40px;
+            color: var(--primary);
+        }
+
+        /* المحتوى */
+        .status-content {
+            padding: 40px 30px 30px;
+        }
+
+        .badge-container {
+            margin-bottom: 15px;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        /* حالات الوسم */
+        .status-badge.beta {
+            background: var(--accent);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .status-badge.dev {
+            background: #f1f5f9;
+            color: #475569;
+            border: 1px solid #cbd5e1;
+        }
+
+        .status-badge.beta::before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.5; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .report-title {
+            font-size: 22px;
+            margin: 0 0 10px 0;
+            font-weight: 800;
+            color: var(--primary-dark);
+        }
+
+        .report-subtitle {
+            font-size: 13px;
+            color: var(--text-light);
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
+
+        .status-description {
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--text-dark);
+            background: #fdfdfd;
+            padding: 15px;
+            border-radius: 12px;
+            border-right: 4px solid var(--primary);
+            margin-bottom: 30px;
+            text-align: right;
+        }
+
+        /* الزر السفلي */
+        .btn-home {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 15px;
+            transition: 0.3s;
+            box-shadow: 0 4px 12px rgba(198, 40, 40, 0.2);
+        }
+
+        .btn-home:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .footer-brand {
+            margin-top: 25px;
+            font-size: 11px;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .footer-brand strong { color: var(--primary); }
+    </style>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+    <div class="status-card" id="mainContainer">
+        <div class="status-header">
+            <div class="icon-circle">
+                <i id="statusIcon" data-lucide="loader-2"></i>
+            </div>
+        </div>
+
+        <div class="status-content">
+            <div class="badge-container">
+                <div id="statusBadge" class="status-badge">جاري التحقق...</div>
+            </div>
+            
+            <h1 id="reportTitle" class="report-title">--</h1>
+            <p id="reportSubtitle" class="report-subtitle">--</p>
+
+            <div id="statusMessage" class="status-description">
+                يرجى الانتظار، جاري فحص حالة التقرير في أنظمة QB-Sentinel...
+            </div>
+
+            <a href="../../index.html" class="btn-home">
+                <i data-lucide="home"></i>
+                العودة للرئيسية
+            </a>
+
+            <div class="footer-brand">
+                <span>تطوير <strong>بلال الخواجة</strong></span>
+                <span>•</span>
+                <span>QB-Sentinel</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/versions.js"></script>
+    <script>
+        function applyStatusIdentity() {
+            const path = window.location.pathname.toUpperCase();
+            const key = Object.keys(APP_VERSIONS).find(k => path.includes(k));
+            
+            if (key) {
+                const status = APP_VERSIONS[key];
+                const badge = document.getElementById('statusBadge');
+                const icon = document.getElementById('statusIcon');
+                const title = document.getElementById('reportTitle');
+                const subtitle = document.getElementById('reportSubtitle');
+                const message = document.getElementById('statusMessage');
+
+                title.innerText = `تقرير ${key}`;
+                subtitle.innerText = `REPORT CODE: ${key}`;
+
+                if (status.includes("BETA")) {
+                    badge.innerText = "نسخة تجريبية - BETA";
+                    badge.className = "status-badge beta";
+                    icon.setAttribute('data-lucide', 'flask-conical');
+                    message.innerText = "هذا التقرير متاح حالياً للاستخدام التجريبي ضمن فروع عصير تايم. قد تلاحظ بعض التحديثات المستمرة لتحسين الأداء.";
+                } 
+                else if (status === "DEV") {
+                    badge.innerText = "قيد التطوير - DEV";
+                    badge.className = "status-badge dev";
+                    icon.setAttribute('data-lucide', 'hammer');
+                    message.innerText = "نعمل حالياً على بناء وتطوير هذا القسم. سيتم تفعيله فور الانتهاء من الاختبارات التقنية المطلوبة.";
+                }
+                
+                lucide.createIcons();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', applyStatusIdentity);
+    </script>
+</body>
+</html>

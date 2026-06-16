@@ -1,0 +1,132 @@
+:root {
+    --primary: #c62828;
+    --primary-dark: #8e0000;
+    --accent: #fff5f5;
+    --text-dark: #2d2e32;
+    --text-light: #6b7280;
+    --border: #e5e7eb;
+    --radius: 12px;
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body {
+    background-color: #f3f4f6;
+    margin: 0;
+    padding: 12px;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    color: var(--text-dark);
+}
+
+.form-container { max-width: 500px; margin: auto; animation: fadeIn 0.5s ease-out; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Header Architecture */
+.main-header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    padding: 30px 20px;
+    border-radius: var(--radius) var(--radius) 20px 20px;
+    text-align: center;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(198, 40, 40, 0.2);
+}
+
+
+.main-header h1 { font-size: 20px; margin: 0; position: relative; z-index: 2; }
+.en-sub-header { font-size: 10px; letter-spacing: 2px; opacity: 0.8; margin-top: 4px; }
+
+/* Cards Styling */
+.card {
+    background: white;
+    margin-top: 15px;
+    padding: 20px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    transition: 0.3s;
+}
+
+.card:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.05); }
+
+.info-card { border-top: 6px solid var(--primary); }
+.description { font-size: 14px; line-height: 1.6; text-align: center; color: var(--text-light); }
+
+.label-heading { font-weight: 700; font-size: 15px; display: block; margin-bottom: 15px; }
+
+/* Branch Selector Grid */
+.branch-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.branch-grid input { display: none; }
+.branch-tile {
+    border: 2px solid var(--border);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.branch-grid input:checked + .branch-tile {
+    border-color: var(--primary);
+    background: var(--accent);
+    color: var(--primary);
+}
+
+/* Modern Input Field */
+.modern-input {
+    display: flex;
+    align-items: center;
+    background: #f9fafb;
+    padding: 12px 15px;
+    border-radius: 8px;
+}
+.modern-input i { color: var(--text-light); margin-left: 12px; width: 18px; }
+.modern-input input { border: none; background: transparent; width: 100%; font-size: 16px; outline: none; }
+
+/* Footer Actions */
+.actions { margin-top: 30px; padding-bottom: 40px; }
+.submit-btn {
+    width: 100%; padding: 20px; background: var(--primary); color: white;
+    border: none; border-radius: 15px; font-size: 18px; font-weight: 700;
+    cursor: pointer; box-shadow: 0 8px 20px rgba(198, 40, 40, 0.3);
+    transition: 0.3s; position: relative;
+}
+.submit-btn:active { transform: scale(0.97); }
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.7); z-index: 1000;
+    display: flex; align-items: center; justify-content: center;
+    backdrop-filter: blur(5px);
+}
+.modal-content {
+    background: white; padding: 30px; border-radius: 20px; width: 90%; max-width: 400px;
+    text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+.modal-loader {
+    width: 40px; height: 40px; border: 4px solid #f3f3f3;
+    border-top: 4px solid var(--primary); border-radius: 50%;
+    margin: 20px auto; animation: spin 1s linear infinite;
+}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+.modal-btn {
+    margin-top: 20px; padding: 12px 30px; background: var(--primary);
+    color: white; border: none; border-radius: 10px; font-weight: 700; cursor: pointer;
+}
+.success-icon { color: #4caf50; width: 60px; height: 60px; margin-bottom: 15px; }
+.error-icon { color: #f44336; width: 60px; height: 60px; margin-bottom: 15px; }
+
+/* Developer Footer */
+.developer-footer { margin-top: 50px; padding: 20px 10px; border-top: 1px solid var(--border); }
+.dev-card { background: white; border-radius: var(--radius); padding: 15px; border: 1px solid var(--border); }
+.dev-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: var(--primary); }
+.version-badge { background: #f3f4f6; padding: 4px 8px; border-radius: 6px; font-size: 11px; }
+
+.hidden { display: none !important; }
+.required { color: var(--primary); }

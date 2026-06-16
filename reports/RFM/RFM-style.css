@@ -1,0 +1,468 @@
+/* =============================================
+   RFM-style.css — طلب توريد مواد
+   Request for Materials | QB-Sentinel
+   ============================================= */
+
+.description {
+  font-size: 0.9rem;
+  color: var(--text-dark);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ══════════════════════════════════════════════
+   حالة تحميل المواد
+   ══════════════════════════════════════════════ */
+.materials-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 36px 20px;
+  text-align: center;
+}
+
+.mat-spinner {
+  width: 44px;
+  height: 44px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid var(--primary);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+.materials-loader p {
+  margin: 0;
+  color: var(--text-light);
+  font-size: 14px;
+}
+
+.materials-loader small {
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+/* ══════════════════════════════════════════════
+   حالة الخطأ / الفارغة
+   ══════════════════════════════════════════════ */
+.materials-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 36px 20px;
+  text-align: center;
+  color: var(--text-light);
+}
+
+.materials-empty i { width: 40px; height: 40px; opacity: 0.4; }
+.materials-empty p { margin: 0; font-size: 14px; }
+.materials-empty small { font-size: 12px; opacity: 0.7; }
+
+/* ══════════════════════════════════════════════
+   رأس قسم المواد
+   ══════════════════════════════════════════════ */
+.mat-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.mat-section-title {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mat-section-title span {
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--text-dark);
+}
+
+.mat-section-title small {
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-light);
+}
+
+.mat-count-badge {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--primary);
+  background: var(--accent);
+  border: 1px solid rgba(198,40,40,0.2);
+  border-radius: 20px;
+  padding: 3px 10px;
+}
+
+/* ══════════════════════════════════════════════
+   شبكة بطاقات المواد — مستطيلات كاملة العرض
+   ══════════════════════════════════════════════ */
+.mat-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ══════════════════════════════════════════════
+   بطاقة المادة الواحدة
+   ══════════════════════════════════════════════ */
+.mat-card {
+  background: #fafafa;
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: all 0.25s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.mat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), transparent);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.mat-card:hover::before { opacity: 0.6; }
+
+.mat-card:hover {
+  border-color: rgba(198,40,40,0.3);
+  box-shadow: 0 4px 14px rgba(198,40,40,0.08);
+  transform: translateY(-2px);
+}
+
+/* البطاقة عند التحديد */
+.mat-card.selected {
+  border-color: var(--primary);
+  background: white;
+  box-shadow: 0 4px 18px rgba(198,40,40,0.13);
+}
+
+.mat-card.selected::before { opacity: 1; }
+
+/* ── رأس البطاقة ─────────────────── */
+.mat-card-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 12px 10px;
+  position: relative;
+}
+
+.mat-icon-wrap {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%);
+  border: 1px solid rgba(198,40,40,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+}
+
+.mat-card.selected .mat-icon-wrap {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  border-color: transparent;
+}
+
+.mat-icon-wrap i { width: 18px; height: 18px; color: var(--primary); }
+.mat-card.selected .mat-icon-wrap i { color: white; }
+
+.mat-names {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mat-name-ar {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mat-name-en {
+  font-size: 10px;
+  color: var(--text-light);
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* وحدة القياس في رأس البطاقة */
+.mat-unit-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  flex-shrink: 0;
+  background: var(--accent);
+  border: 1px solid rgba(198,40,40,0.18);
+  border-radius: 8px;
+  padding: 4px 9px;
+  min-width: 42px;
+  text-align: center;
+}
+.mat-unit-info .unit-ar  { font-size: 12px; font-weight: 700; color: var(--primary); line-height: 1.2; }
+.mat-unit-info .unit-en  { font-size: 9px; color: var(--text-light); letter-spacing: 0.2px; }
+
+/* مربع الاختيار المخصص */
+.mat-check {
+  position: relative;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.mat-check input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  margin: 0;
+  color: var(--text-dark);
+}
+
+.mat-check-box {
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--border);
+  border-radius: 6px;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  pointer-events: none;
+}
+
+.mat-card.selected .mat-check-box {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.mat-check-box i {
+  width: 14px;
+  height: 14px;
+  color: white;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all 0.2s ease;
+}
+
+.mat-card.selected .mat-check-box i {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ── جسم البطاقة (حقول الكمية) ──── */
+.mat-card-body {
+  padding: 0 12px 14px;
+  display: none;
+  animation: matBodyIn 0.25s ease;
+}
+
+.mat-card.selected .mat-card-body {
+  display: block;
+}
+
+@keyframes matBodyIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.mat-divider {
+  height: 1px;
+  background: linear-gradient(90deg, var(--primary), transparent);
+  opacity: 0.2;
+  margin-bottom: 12px;
+}
+
+.mat-qty-row {
+  margin-bottom: 10px;
+}
+
+.mat-qty-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-light);
+  margin-bottom: 6px;
+}
+
+.mat-qty-label i { width: 13px; height: 13px; color: var(--primary); }
+
+.mat-input-wrap {
+  display: flex;
+  align-items: center;
+  background: #f9fafb;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mat-input-wrap:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(198,40,40,0.08);
+}
+
+.mat-input-wrap input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 10px 12px;
+  font-size: 16px;
+  outline: none;
+  color: var(--text-dark);
+  direction: ltr;
+  text-align: center;
+  font-weight: 600;
+}
+
+.mat-unit-tag {
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  color: white;
+  background: var(--primary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  min-height: 42px;
+  flex-shrink: 0;
+  gap: 1px;
+}
+
+.mat-unit-tag .tag-ar  { font-size: 12px; font-weight: 700; line-height: 1.2; }
+.mat-unit-tag .tag-en  { font-size: 9px;  font-weight: 400; opacity: 0.75; letter-spacing: 0.2px; }
+
+.mat-unit-tag.current  { background: #6b7280; }
+.mat-unit-tag.requested{ background: var(--primary); }
+
+/* ══════════════════════════════════════════════
+   ملخص الطلب (بعد التحديد)
+   ══════════════════════════════════════════════ */
+.rfm-summary-banner {
+  background: linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%);
+  border: 1px solid rgba(198,40,40,0.2);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-top: 14px;
+  display: none;
+  animation: matBodyIn 0.3s ease;
+}
+
+.rfm-summary-banner.visible { display: block; }
+
+.rfm-summary-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--primary);
+  margin-bottom: 10px;
+}
+
+.rfm-summary-head i { width: 16px; height: 16px; }
+
+.rfm-summary-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rfm-summary-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  padding: 6px 0;
+  border-bottom: 1px dashed rgba(198,40,40,0.15);
+}
+
+.rfm-summary-item:last-child { border-bottom: none; }
+
+.rfm-summary-item-name { color: var(--text-dark); font-weight: 600; }
+.rfm-summary-item-qty  { color: var(--primary); font-weight: 700; font-size: 12px; }
+
+/* ── شارة الحد الأدنى ────────────────────────── */
+.mat-min-level {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #fff8e1;
+  border: 1px solid #ffe082;
+  border-radius: 12px;
+  padding: 2px 8px;
+  font-size: 10px;
+  color: #f57f17;
+  font-weight: 600;
+  margin-top: 3px;
+  flex-wrap: wrap;
+}
+.mat-min-level i   { width: 11px; height: 11px; flex-shrink: 0; }
+.mat-min-level small { opacity: 0.7; font-weight: 400; }
+
+/* ══════════════════════════════════════════════
+   hint row
+   ══════════════════════════════════════════════ */
+.rfm-hint {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  font-size: 12px;
+  color: var(--text-light);
+  margin: -4px 0 12px;
+  line-height: 1.6;
+}
+
+.rfm-hint i { width: 14px; height: 14px; flex-shrink: 0; margin-top: 2px; }
+
+/* ══════════════════════════════════════════════
+   زر الإعادة / Retry
+   ══════════════════════════════════════════════ */
+.retry-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  padding: 10px 20px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.retry-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+.retry-btn i { width: 14px; height: 14px; }
+
+/* animation مشترك */
+@keyframes spin {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

@@ -1,0 +1,422 @@
+/* ═══════════════════════════════════════════════════════
+   FIL Notifications Panel — يُضاف في نهاية FIL-style.css
+   ═══════════════════════════════════════════════════════ */
+
+/* ── زر الإشعارات في الهيدر ── */
+.header-actions-top {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+}
+
+.notification-btn,
+.refresh-btn {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+    position: relative;
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    backdrop-filter: blur(6px);
+}
+
+.notification-btn:hover,
+.refresh-btn:hover {
+    background: rgba(255,255,255,0.28);
+    transform: scale(1.08);
+}
+
+.notification-btn.btn-active {
+    background: rgba(255,255,255,0.35);
+    box-shadow: 0 0 0 3px rgba(255,255,255,0.25);
+}
+
+/* ── نقطة الإشعارات — أوضح وأكبر ── */
+.notification-dot {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: transparent;
+    border: 2.5px solid transparent;
+    transition: all 0.3s;
+    pointer-events: none;
+}
+
+/* حالة: يوجد إشعارات — نقطة صفراء واضحة */
+.notification-dot.dot-active {
+    background: #fbbf24;
+    border-color: #8e0000;
+    box-shadow:
+        0 0 0 2px rgba(251,191,36,0.4),
+        0 0 10px rgba(251,191,36,0.7);
+    animation: dotBounce 1.8s ease-in-out infinite;
+}
+
+@keyframes dotBounce {
+    0%, 100% { transform: scale(1);    }
+    40%       { transform: scale(1.35); }
+    60%       { transform: scale(0.9);  }
+}
+
+/* حالة: جاري المزامنة — حلقة دوران حول الزر بأكمله */
+.notification-btn.btn-loading {
+    animation: btnRingPulse 1s ease-in-out infinite;
+}
+
+.notification-btn.btn-loading::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: rgba(255,255,255,0.9);
+    border-right-color: rgba(255,255,255,0.5);
+    animation: spin 0.9s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes btnRingPulse {
+    0%, 100% { box-shadow: 0 0 0 0   rgba(255,255,255,0.4); }
+    50%       { box-shadow: 0 0 0 5px rgba(255,255,255,0);   }
+}
+
+/* أيقونة الجرس تتأرجح أثناء التحميل */
+.notification-btn.btn-loading i {
+    animation: bellShake 1s ease-in-out infinite;
+}
+
+@keyframes bellShake {
+    0%, 100% { transform: rotate(0deg);   }
+    20%       { transform: rotate(-15deg); }
+    40%       { transform: rotate(15deg);  }
+    60%       { transform: rotate(-10deg); }
+    80%       { transform: rotate(10deg);  }
+}
+
+/* إخفاء النقطة أثناء التحميل (الحلقة تكفي) */
+.notification-btn.btn-loading .notification-dot {
+    opacity: 0;
+}
+
+/* ── اللوحة الطائرة (Floating Panel) ── */
+.notif-panel {
+    position: fixed;
+    top: 70px;
+    left: 12px;
+    width: 310px;
+    max-width: calc(100vw - 24px);
+    background: white;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    box-shadow:
+        0 4px 6px rgba(0,0,0,0.05),
+        0 20px 50px rgba(0,0,0,0.18);
+    overflow: hidden;
+    transform-origin: top left;
+    z-index: 9999;
+}
+
+/* سهم يشير للزر */
+.notif-panel::before {
+    content: '';
+    position: absolute;
+    top: -7px;
+    left: 18px;
+    width: 14px;
+    height: 14px;
+    background: var(--primary);
+    transform: rotate(45deg);
+    border-radius: 3px 0 0 0;
+    z-index: -1;
+}
+
+.notif-panel.hidden {
+    display: none !important;
+}
+
+.notif-panel-visible {
+    animation: floatOpen 0.3s cubic-bezier(0.34, 1.5, 0.64, 1) forwards;
+}
+
+.notif-panel-hiding {
+    animation: floatClose 0.22s ease-in forwards;
+}
+
+@keyframes floatOpen {
+    from { opacity: 0; transform: scale(0.88) translateY(-12px); }
+    to   { opacity: 1; transform: scale(1)    translateY(0);      }
+}
+
+@keyframes floatClose {
+    from { opacity: 1; transform: scale(1)   translateY(0);    }
+    to   { opacity: 0; transform: scale(0.9) translateY(-8px); }
+}
+
+/* ── رأس اللوحة ── */
+.notif-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px 15px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+}
+
+.notif-header-title {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.notif-header-title small {
+    font-size: 9px;
+    opacity: 0.7;
+    letter-spacing: 1px;
+}
+
+.notif-header-icon { width: 16px; height: 16px; }
+
+/* زر X للإغلاق — بارز وواضح */
+.notif-close-btn {
+    background: rgba(255,255,255,0.2);
+    border: 1.5px solid rgba(255,255,255,0.4);
+    border-radius: 8px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.notif-close-btn i { width: 16px; height: 16px; }
+
+.notif-close-btn:hover {
+    background: rgba(255,255,255,0.35);
+    border-color: rgba(255,255,255,0.65);
+    transform: scale(1.1);
+}
+
+.notif-close-btn:active { transform: scale(0.95); }
+
+/* ── شريط المزامنة ── */
+.notif-sync-bar {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 15px;
+    background: #fff8e1;
+    border-bottom: 1px solid #ffe082;
+    font-size: 11px;
+    color: #b45309;
+    font-weight: 600;
+}
+
+.notif-sync-bar.notif-sync-visible {
+    display: flex;
+    animation: fadeIn 0.3s;
+}
+
+.notif-sync-spinner {
+    width: 13px;
+    height: 13px;
+    border: 2px solid #fde68a;
+    border-top: 2px solid #b45309;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    flex-shrink: 0;
+}
+
+/* ── جسم الإشعارات ── */
+.notif-body {
+    max-height: 320px;
+    overflow-y: auto;
+    padding: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+}
+
+.notif-body::-webkit-scrollbar       { width: 4px; }
+.notif-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+/* ── حالة فارغة ── */
+.notif-empty {
+    text-align: center;
+    padding: 28px 16px;
+    color: var(--text-light);
+}
+
+.notif-empty-icon {
+    width: 36px;
+    height: 36px;
+    margin: 0 auto 10px;
+    color: #d1d5db;
+    display: block;
+}
+
+.notif-empty p     { margin: 0; font-size: 13px; }
+.notif-empty small { font-size: 10px; opacity: 0.6; }
+
+/* ── بطاقة إشعار واحدة ── */
+.notif-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 11px;
+    border-radius: 10px;
+    margin-bottom: 7px;
+    border: 1.5px solid var(--border);
+    background: #fafafa;
+    animation: notifItemIn 0.32s ease both;
+    position: relative;
+}
+
+@keyframes notifItemIn {
+    from { opacity: 0; transform: translateX(-8px); }
+    to   { opacity: 1; transform: translateX(0);    }
+}
+
+.notif-item:last-child { margin-bottom: 0; }
+
+.notif-item.notif-overdue { border-color: #fca5a5; background: #fff5f5; }
+.notif-item.notif-urgent  { border-color: #fde68a; background: #fffbeb; }
+.notif-item.notif-soon    { border-color: #bfdbfe; background: #eff6ff; }
+.notif-item.notif-ok      { border-color: #bbf7d0; background: #f0fdf4; }
+
+/* أيقونة البطاقة */
+.notif-item-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.notif-item-icon i { width: 18px; height: 18px; }
+
+.icon-overdue { background: #fee2e2; color: #dc2626; }
+.icon-urgent  { background: #fef3c7; color: #d97706; }
+.icon-soon    { background: #dbeafe; color: #2563eb; }
+.icon-ok      { background: #dcfce7; color: #16a34a; }
+.icon-unknown { background: #f3f4f6; color: #6b7280; }
+
+/* محتوى البطاقة */
+.notif-item-body { flex: 1; min-width: 0; }
+
+.notif-item-branch {
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--text-dark);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 4px;
+}
+
+.notif-branch-pin { width: 12px; height: 12px; color: var(--text-light); flex-shrink: 0; }
+
+.notif-item-detail,
+.notif-item-next {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    margin-top: 2px;
+}
+
+.notif-label { color: var(--text-light); flex-shrink: 0; }
+.notif-val   { color: var(--text-dark); font-weight: 600; }
+
+/* أيقونة صغيرة بجانب كل صف */
+.notif-row-icon {
+    width: 11px;
+    height: 11px;
+    color: var(--text-light);
+    flex-shrink: 0;
+    opacity: 0.7;
+}
+
+.notif-time {
+    font-weight: 700;
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.4px;
+}
+
+.notif-time-overdue { color: #dc2626; }
+.notif-time-urgent  { color: #d97706; }
+.notif-time-soon    { color: #2563eb; }
+.notif-time-ok      { color: #16a34a; }
+.notif-time-unknown { color: var(--text-light); }
+
+/* شارة الحالة */
+.notif-badge {
+    font-size: 9px;
+    font-weight: 700;
+    padding: 3px 7px;
+    border-radius: 20px;
+    flex-shrink: 0;
+    align-self: flex-start;
+}
+
+.notif-badge-overdue { background: #fee2e2; color: #dc2626; }
+.notif-badge-urgent  { background: #fef3c7; color: #d97706; }
+.notif-badge-soon    { background: #dbeafe; color: #2563eb; }
+.notif-badge-ok      { background: #dcfce7; color: #16a34a; }
+.notif-badge-unknown { background: #f3f4f6; color: #6b7280; }
+
+/* ── تذييل اللوحة ── */
+.notif-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 9px 12px;
+    border-top: 1px solid var(--border);
+    background: #fafafa;
+}
+
+.notif-refresh-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 5px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--primary);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.notif-refresh-btn:hover {
+    background: var(--accent);
+    border-color: var(--primary);
+}
+
+.notif-refresh-btn i { width: 13px; height: 13px; }
+
+.notif-last-update {
+    font-size: 10px;
+    color: var(--text-light);
+}

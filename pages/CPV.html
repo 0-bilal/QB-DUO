@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>سند صرف نقدية | CPV</title>
+    <link rel="stylesheet" href="../reports/CPV/CPV-style.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="icon" type="image/x-icon" href="../ico/logo.ico">
+</head>
+<body>
+
+<div id="customModal" class="modal-overlay hidden">
+    <div class="modal-content">
+        <div id="modalIcon" class="modal-icon"></div>
+        <h3 id="modalTitle"></h3>
+        <p id="modalMessage"></p>
+        <div id="modalLoader" class="modal-loader hidden"></div>
+        <button id="modalClose" class="modal-btn hidden">موافق / OK</button>
+    </div>
+</div>
+
+<div class="form-container">
+    <header class="main-header">
+        <div class="header-overlay"></div>
+        <div class="logo-area">
+
+<div class="logo-area">
+    <div class="header-actions-top">
+        <a href="about.html" id="notificationsBtn" class="notification-btn" title="مقدم من برمجيات QB" style="text-decoration: none;">
+                <img src="../ico/QB-Sentinel-Logo.ico" alt="QB Sentinel" class="logo-QB">
+                </a>
+        <button id="refreshApp" class="refresh-btn" title="تحديث النظام">
+            <i data-lucide="refresh-cw"></i>
+        </button>
+    </div>
+
+            <img src="../ico/logo.ico" alt="Logo" class="logo">
+            <h1>سند صرف نقدية</h1>
+            <p class="en-sub-header">CASH PAYMENT VOUCHER</p>
+        </div>
+    </header>
+
+    <form id="paymentVoucherForm" novalidate>
+        <div class="card info-card">
+            <p class="description">أداة رقابية لتوثيق وضبط كافة الحركات المالية والمصروفات النقدية،</p>
+            <div class="required-indicator"></div>
+        </div>
+
+        <div class="back-nav">
+            <a href="../index.html" class="back-btn">
+                <i data-lucide="arrow-right"></i>
+                <span>العودة للقائمة الرئيسية</span>
+                <small>Return</small>
+            </a>
+        </div>
+
+        <div class="card" id="branchCard">
+            <label class="label-heading">اختيار الفرع / Select Branch <span class="required">*</span></label>
+            <div class="branch-grid">
+                <input type="radio" id="branch1" name="branch" value="Dawadimi" required>
+                <label for="branch1" class="branch-tile">
+                    <i data-lucide="map-pin"></i>
+                    <div class="tile-text">
+                        <span>الدوادمي</span>
+                        <small>Al-Dawadimi</small>
+                    </div>
+                </label>
+
+                <input type="radio" id="branch2" name="branch" value="Muzahmiyah">
+                <label for="branch2" class="branch-tile">
+                    <i data-lucide="map-pin"></i>
+                    <div class="tile-text">
+                        <span>المزاحمية</span>
+                        <small>Al-Muzahmiyah</small>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <div class="card" id="idCard">
+            <label class="label-heading">رقم الموظف للتحقق / Employee ID <span class="required">*</span></label>
+            <div class="modern-input">
+                <i data-lucide="hash"></i>
+                <input type="number" id="employeeId" placeholder="ID Number" required>
+            </div>
+        </div>
+
+        <!-- بطاقة الجلسة الحالية -->
+        <div id="savedInfo" class="card hidden">
+            <label class="label-heading">معلومات الموظف / Employee Information</label>
+            <div class="user-badge">
+                <div class="badge-icon">
+                    <i data-lucide="user-check"></i>
+                </div>
+                <div class="badge-details">
+                    <span id="displayUser" class="badge-name"></span>
+                    <small id="displayBranch" class="badge-branch"></small>
+                </div>
+            </div>
+            <button type="button" id="resetBtn" class="reset-link">
+                <i data-lucide="refresh-cw"></i>
+                تغيير / Change
+            </button>
+        </div>
+
+        <div class="card" id="reasonCard">
+            <label class="label-heading">سبب الصرف / Reason for Payment <span class="required">*</span></label>
+            <div class="modern-input">
+                <i data-lucide="file-text"></i>
+                <input type="text" id="paymentReason" placeholder="Purpose of payment" required>
+            </div>
+        </div>
+
+        <div class="card" id="amountCard">
+            <label class="label-heading">المبلغ المصروف / Amount (SAR) <span class="required">*</span></label>
+            <div class="modern-input">
+                <i data-lucide="banknote"></i>
+                <input type="number" id="amount" step="0.01" placeholder="0.00" required>
+            </div>
+        </div>
+
+        <div class="card" id="beneficiaryCard">
+            <label class="label-heading">رقم هاتف المستفيد من الصرف / Beneficiary Phone <small>(Optional)</small></label>
+            <div class="modern-input">
+                <i data-lucide="phone"></i> <input type="tel" id="beneficiaryPhone" placeholder="05xxxxxxxx رقم ">
+            </div>
+        </div>
+
+        <div class="actions">
+            <button type="submit" class="submit-btn" id="submitBtn">
+                <span class="btn-content">
+                    <i data-lucide="check-circle"></i>
+                    إرسال السند / Submit
+                </span>
+            </button>
+        </div>
+    </form>
+</div>
+
+<footer class="developer-footer">
+    <div class="dev-card">
+        <div class="dev-card-content">
+            <div class="dev-header">
+                <i data-lucide="code-2" class="dev-icon"></i>
+                <span class="project-name">QB-Sentinel</span>
+            </div>
+            <p class="dev-text">
+                التطوير <strong>بلال الخواجة</strong>
+                <span class="brand-text">من ضمن برمجيات QB</span>
+            </p>
+            <div class="client-info">
+                <i data-lucide="warehouse" class="client-icon"></i>
+                <span>مقدم إلى عصير تايم (الدوادمي & المزاحمية)</span>
+            </div>
+            <div class="version-badge">
+                <span class="version-label">Version</span>
+                <span class="version-number">v0.0.0 </span>
+            </div>
+        </div>
+    </div>
+</footer>
+<script src="../js/config.js"></script>
+<script src="../js/endpoints.js"></script>
+<script src="../js/session.js"></script>
+<script src="../js/common.js"></script>
+<script src="../reports/CPV/CPV-script.js"></script>
+<script src="../js/versions.js"></script>
+
+<script>lucide.createIcons();</script>
+</body>
+</html>

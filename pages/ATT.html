@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>تسجيل الحضور والانصراف | ATT</title>
+        <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../reports/ATT/ATT-style.css">
+
+
+    <!-- المكتبات الأساسية -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+
+    <!-- ✅ FingerprintJS v4 — بصمة الجهاز -->
+    <script>
+        !function(w,d,s,l,i){
+            w[l]=w[l]||[];
+            var f=d.getElementsByTagName(s)[0],
+                j=d.createElement(s);
+            j.async=true;
+            j.src='https://fpjscdn.net/v3/'+i+'/iife.min.js';
+            j.onload=function(){
+                // المكتبة المفتوحة المصدر (بدون API key)
+            };
+            f.parentNode.insertBefore(j,f)
+        }(window,document,'script','_fpjs','');
+    </script>
+    <!-- بديل مباشر للمكتبة المفتوحة المصدر -->
+    <script src="https://openfpcdn.io/fingerprintjs/v4/iife.min.js"></script>
+
+    <link rel="icon" type="image/x-icon" href="../ico/QB-Sentinel-Logo.ico">
+
+
+</head>
+<body>
+
+<!-- Modal -->
+<div id="customModal" class="modal-overlay hidden">
+    <div class="modal-content">
+        <div id="modalIcon" class="modal-icon"></div>
+        <h3 id="modalTitle"></h3>
+        <p id="modalMessage"></p>
+        <div id="modalLoader" class="modal-loader hidden"></div>
+        <button id="modalClose" class="modal-btn hidden">موافق / OK</button>
+    </div>
+</div>
+
+<!-- Reset Modal -->
+<div id="resetModal" class="modal-overlay hidden">
+    <div class="modal-content">
+        <div class="modal-icon">
+            <i data-lucide="shield-alert" class="reset-icon"></i>
+        </div>
+        <h3>إدخال كود إعادة التعيين</h3>
+        <p>Enter Reset Code</p>
+        <input type="password" id="resetCodeInput" placeholder="أدخل الكود هنا / Enter Code" class="code-input">
+        <div class="modal-footer">
+            <button id="confirmReset" class="modal-btn">تأكيد / Confirm</button>
+            <button id="cancelReset" class="modal-btn secondary">إلغاء / Cancel</button>
+        </div>
+    </div>
+</div>
+
+<div class="form-container">
+
+    <header class="main-header">
+            <div class="header-overlay"></div>
+              <div class="logo-area">
+                 <div class="logo-area">
+                   <div class="header-actions-top">
+                     <a href="../about.html" id="notificationsBtn" class="notification-btn" title="مقدم من برمجيات QB" style="text-decoration: none;">
+                     <img src="../ico/QB-Sentinel-Logo.ico" alt="QB Sentinel" class="logo-QB">
+                     </a>
+           <button id="refreshApp" class="refresh-btn" title="تحديث النظام">
+            <i data-lucide="refresh-cw"></i>
+          </button>
+    </div>
+
+            <img src="../ico/logo.ico" alt="Logo" class="logo">
+            <h1>حضور وانصراف الموظفين</h1>
+            <p class="en-sub-header">STAFF ATTENDANCE (IN/OUT)</p>
+        </div>
+    </header>
+
+    <!-- بطاقة وصف -->
+    <div class="card info-card">
+        <p class="description">نظام تسجيل الحضور والانصراف عبر مسح رمز QR، يضمن دقة وشفافية سجلات الدوام للموظفين</p>
+        <div class="required-indicator"></div>
+    </div>
+
+    <!-- زر العودة -->
+    <div class="back-nav">
+        <a href="../index.html" class="back-btn">
+            <i data-lucide="arrow-right"></i>
+            <span>العودة للقائمة الرئيسية</span>
+            <small>Return</small>
+        </a>
+    </div>
+
+    <!-- بطاقة الفرع -->
+    <div class="card" id="branchCard">
+        <label class="label-heading">اختيار الفرع / Select Branch <span class="required">*</span></label>
+        <div class="branch-grid">
+            <input type="radio" id="branch1" name="branch" value="Al-Shawqiyah">
+            <label for="branch1" class="branch-tile">
+                <i data-lucide="map-pin"></i>
+                <div class="tile-text">
+                    <span>الشوقية</span>
+                    <small>Al-Shawqiyah</small>
+                </div>
+            </label>
+
+            
+        </div>
+    </div>
+
+    <!-- بطاقة الموظف — تظهر دائماً -->
+    <div class="card" id="employeeCard">
+        <label class="label-heading">اختر اسمك / Select Your Name <span class="required">*</span></label>
+        <div id="employeeGrid" class="branch-grid employee-placeholder-grid">
+            <div class="emp-placeholder">
+                <i data-lucide="user-x"></i>
+                <span>يرجى اختيار الفرع أولاً</span>
+                <small>Please select the branch first</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- بطاقة المعلومات المحفوظة -->
+    <div id="savedInfo" class="card hidden">
+        <label class="label-heading">معلومات الموظف / Employee Information</label>
+        <div class="user-badge">
+            <div class="badge-icon">
+                <i data-lucide="user-check"></i>
+            </div>
+            <div class="badge-details">
+                <span id="displayUser" class="badge-name"></span>
+                <small id="displayBranch" class="badge-branch"></small>
+            </div>
+        </div>
+        <button id="resetBtn" class="reset-link">
+            <i data-lucide="refresh-cw"></i>
+            إعادة تعيين / Reset
+        </button>
+    </div>
+
+    <!-- بطاقة الماسح — تظهر دائماً -->
+    <div class="card" id="scannerCard">
+        <label class="label-heading">مسح رمز QR / Scan QR Code <span class="required">*</span></label>
+
+        <!-- حالة الانتظار (قبل اختيار الموظف) -->
+        <div id="scannerIdle" class="scanner-idle-state">
+            <div class="scanner-idle-icon">
+                <i data-lucide="qr-code"></i>
+            </div>
+            <p class="scanner-idle-title">في انتظار اختيار الموظف</p>
+            <small class="scanner-idle-sub">Waiting for employee selection</small>
+            <div class="scanner-idle-steps">
+                <div class="step-item">
+                    <div class="step-num">١</div>
+                    <span>اختر الفرع</span>
+                </div>
+                <div class="step-arrow"><i data-lucide="chevron-left"></i></div>
+                <div class="step-item">
+                    <div class="step-num">٢</div>
+                    <span>اختر اسمك</span>
+                </div>
+                <div class="step-arrow"><i data-lucide="chevron-left"></i></div>
+                <div class="step-item">
+                    <div class="step-num">٣</div>
+                    <span>امسح الرمز</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- حالة طلب الإذن -->
+        <div id="scannerPermission" class="scanner-idle-state hidden">
+            <div class="scanner-idle-icon permission-icon">
+                <i data-lucide="camera-off"></i>
+            </div>
+            <p class="scanner-idle-title">يلزم إذن الكاميرا</p>
+            <small class="scanner-idle-sub">Camera permission required</small>
+            <button id="retryCamera" class="camera-retry-btn">
+                <i data-lucide="camera"></i>
+                السماح بالوصول / Allow Access
+            </button>
+        </div>
+
+        <!-- الماسح الفعلي -->
+        <div id="scannerSection" class="hidden">
+            <div class="scanner-wrapper">
+                <div id="reader"></div>
+            </div>
+            <p class="hint-text">
+                <i data-lucide="monitor-smartphone"></i>
+                وجه الكاميرا نحو شاشة الآيباد الثابتة في المحل
+            </p>
+        </div>
+    </div>
+
+</div>
+
+<!-- Footer -->
+<footer class="developer-footer">
+    <div class="dev-card">
+        <div class="dev-card-content">
+            <div class="dev-header">
+                <i data-lucide="code-2" class="dev-icon"></i>
+                <span class="project-name">QB-Sentinel</span>
+            </div>
+            <p class="dev-text">
+                التطوير <strong>بلال الخواجة</strong>
+                <span class="brand-text">من ضمن برمجيات QB</span>
+            </p>
+            <div class="client-info">
+                <i data-lucide="warehouse" class="client-icon"></i>
+                <span>مقدم إلى ديو برجر ( DUO BURGER )</span>
+            </div>
+            <div class="version-badge">
+                <span class="version-label">Version</span>
+                <span class="version-number">v0.0.0 </span>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="../js/endpoints.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/common.js"></script>
+<script src="../js/versions.js"></script>
+<script src="../reports/ATT/ATT-script.js"></script>
+
+<script>lucide.createIcons();</script>
+</body>
+</html>

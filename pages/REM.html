@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>تذكير تجديد الإقامات والعقود | REM</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../reports/REM/REM-style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="icon" type="image/x-icon" href="../ico/logo.ico">
+</head>
+<body>
+
+<div id="customModal" class="modal-overlay hidden">
+    <div class="modal-content">
+        <div id="modalIcon" class="modal-icon"></div>
+        <h3 id="modalTitle"></h3>
+        <p id="modalMessage"></p>
+        <div id="modalLoader" class="modal-loader hidden"></div>
+        <button id="modalClose" class="modal-btn hidden">موافق / OK</button>
+    </div>
+</div>
+
+<!-- Detail Modal -->
+<div id="reminderDetailModal" class="modal-overlay hidden">
+    <div class="modal-content detail-modal">
+        <div class="detail-modal-header">
+            <div class="detail-date-badge">
+                <span id="detailDay"></span>
+                <small id="detailMonth"></small>
+            </div>
+            <div class="detail-header-text">
+                <h3 id="detailTitle">تذكيرات اليوم</h3>
+                <p id="detailSubtitle"></p>
+            </div>
+        </div>
+        <div id="reminderList" class="reminder-list"></div>
+        <button id="detailClose" class="modal-btn">إغلاق / Close</button>
+    </div>
+</div>
+
+<!-- Add Reminder Modal -->
+<div id="addReminderModal" class="modal-overlay hidden">
+    <div class="modal-content add-modal">
+        <div class="add-modal-header">
+            <i data-lucide="bell-plus"></i>
+            <h3>إضافة تذكير جديد</h3>
+            <p>Add New Reminder</p>
+        </div>
+        <div class="add-form">
+            <div class="add-field">
+                <label>اسم تذكير / Masculine Name <span class="required">*</span></label>
+                <input type="text" id="remEmployeeName" placeholder="أدخل اسم تذكير">
+            </div>
+            <div class="add-field">
+                <label>نوع التذكير / Reminder Type <span class="required">*</span></label>
+                <select id="remType" class="custom-select">
+                    <option value="">-- اختر النوع --</option>
+                    <option value="iqama">تجديد إقامة | Iqama Renewal</option>
+                    <option value="contract">تجديد عقد | Contract Renewal</option>
+                    <option value="health">شهادة صحية | Health Certificate</option>
+                    <option value="passport">تجديد جواز | Passport Renewal</option>
+                    <option value="other">أخرى | Other</option>
+                </select>
+            </div>
+            <div class="add-field">
+                <label>تاريخ الانتهاء / Expiry Date <span class="required">*</span></label>
+                <input type="date" id="remDate" class="date-input">
+            </div>
+            <div class="add-field">
+                <label>الفرع / Branch</label>
+                <select id="remBranch" class="custom-select">
+                    <option value="Dawadimi">الدوادمي | Al-Dawadimi</option>
+                    <option value="Muzahmiyah">المزاحمية | Al-Muzahmiyah</option>
+                </select>
+            </div>
+            <div class="add-field">
+                <label>ملاحظات / Notes</label>
+                <textarea id="remNotes" placeholder="أي ملاحظات إضافية..." rows="2"></textarea>
+            </div>
+        </div>
+        <div class="add-modal-actions">
+            <button id="saveReminder" class="submit-btn add-save-btn">
+                <i data-lucide="save"></i> حفظ التذكير
+            </button>
+            <button id="addClose" class="cancel-btn">إلغاء</button>
+        </div>
+    </div>
+</div>
+
+<div class="form-container">
+    <header class="main-header">
+            <div class="header-overlay"></div>
+              <div class="logo-area">
+                 <div class="logo-area">
+                   <div class="header-actions-top">
+                     <a href="../about.html" id="notificationsBtn" class="notification-btn" title="مقدم من برمجيات QB" style="text-decoration: none;">
+                     <img src="../ico/QB-Sentinel-Logo.ico" alt="QB Sentinel" class="logo-QB">
+                     </a>
+           <button id="refreshApp" class="refresh-btn" title="تحديث النظام">
+            <i data-lucide="refresh-cw"></i>
+          </button>
+    </div>
+        <img src="../ico/logo.ico" alt="Logo" class="logo">
+        <h1>تذكير تجديد الإقامات والعقود</h1>
+        <p class="en-sub-header">ID & CONTRACT RENEWAL REMINDER</p>
+    </header>
+
+
+
+
+        <div class="card info-card">
+            <p class="description">وداعاً لغرامات التأخير وفوات المواعيد! يقدم لك نظام REM ضمن حزمة برمجيات QB-Sentinel حلاً ذكياً ومتكاملاً لمتابعة تجديد الإقامات، العقود</p>
+            <span class="report-tag">مقدم من برمجيات QB</span> 
+            <div class="required-indicator"></div>
+            
+            
+        </div>
+
+    <div class="back-nav">
+        <a href="../index.html" class="back-btn">
+            <i data-lucide="arrow-right"></i>
+            <span>العودة للقائمة الرئيسية</span>
+            <small>Return</small>
+        </a>
+    </div>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+        <div class="stat-pill stat-urgent">
+            <i data-lucide="alert-triangle"></i>
+            <span id="statUrgent">0</span>
+            <small>عاجل (7 أيام)</small>
+        </div>
+        <div class="stat-pill stat-soon">
+            <i data-lucide="clock"></i>
+            <span id="statSoon">0</span>
+            <small>قريب (30 يوم)</small>
+        </div>
+        <div class="stat-pill stat-ok">
+            <i data-lucide="check-circle"></i>
+            <span id="statOk">0</span>
+            <small>بخير</small>
+        </div>
+    </div>
+
+    <!-- Calendar Card -->
+    <div class="card calendar-card">
+        <div class="calendar-nav">
+            <button id="prevMonth" class="cal-nav-btn"><i data-lucide="chevron-right"></i></button>
+            <div class="calendar-title">
+                <span id="calMonthYear"></span>
+                <small id="calHijri"></small>
+            </div>
+            <button id="nextMonth" class="cal-nav-btn"><i data-lucide="chevron-left"></i></button>
+        </div>
+
+        <div class="calendar-weekdays">
+            <span>أح</span><span>إث</span><span>ثل</span><span>أر</span><span>خم</span><span>جم</span><span>سب</span>
+        </div>
+
+        <div id="calendarGrid" class="calendar-grid"></div>
+
+        <!-- Legend -->
+        <div class="cal-legend">
+            <div class="legend-item"><span class="dot dot-urgent"></span> عاجل جداً</div>
+            <div class="legend-item"><span class="dot dot-soon"></span> قريب</div>
+            <div class="legend-item"><span class="dot dot-normal"></span> عادي</div>
+            <div class="legend-item"><span class="dot dot-today"></span> اليوم</div>
+        </div>
+    </div>
+
+    <!-- Upcoming Reminders -->
+    <div class="card" id="upcomingCard">
+        <div class="title-row">
+            <span class="label-heading" style="margin-bottom:0">التذكيرات القادمة</span>
+            <span class="en-label">UPCOMING</span>
+        </div>
+        <div id="upcomingList" class="upcoming-list"></div>
+    </div>
+
+    <!-- Add Button -->
+    <div class="actions">
+        <button id="openAddModal" class="submit-btn">
+            <span class="btn-content">
+                <i data-lucide="plus-circle"></i>
+                إضافة تذكير جديد / Add Reminder
+            </span>
+        </button>
+    </div>
+</div>
+
+<footer class="developer-footer">
+    <div class="dev-card">
+        <div class="dev-card-content">
+            <div class="dev-header">
+                <i data-lucide="code-2" class="dev-icon"></i>
+                <span class="project-name">QB-Sentinel</span>
+            </div>
+            <p class="dev-text">
+                التطوير <strong>بلال الخواجة</strong>
+                <span class="brand-text">من ضمن برمجيات QB</span>
+            </p>
+            <div class="client-info">
+                <i data-lucide="warehouse" class="client-icon"></i>
+                <span>مقدم إلى عصير تايم (الدوادمي & المزاحمية)</span>
+            </div>
+            <div class="version-badge">
+                <span class="version-label">Version</span>
+                <span class="version-number">v0.0.0 </span>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="../js/config.js"></script>
+<script src="../js/endpoints.js"></script>
+<script src="../js/common.js"></script>
+<script src="../reports/REM/REM-script.js"></script>
+<script src="../js/versions.js"></script>
+<script>lucide.createIcons();</script>
+</body>
+</html>

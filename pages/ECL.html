@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>سجل تنظيف المعدات | ECL</title>
+    <link rel="stylesheet" href="../reports/ECL/ECL-style.css">
+        <link rel="stylesheet" href="../css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="icon" type="image/x-icon" href="../ico/logo.ico">
+</head>
+<body>
+
+    <div id="customModal" class="modal-overlay hidden">
+    <div class="modal-content">
+        <div id="modalIcon" class="modal-icon"></div>
+        <h3 id="modalTitle"></h3>
+        <p id="modalMessage"></p>
+        <div id="modalLoader" class="modal-loader hidden"></div>
+        <button id="modalClose" class="modal-btn hidden">موافق / OK</button>
+    </div>
+    </div>
+
+    <div class="form-container">
+     <header class="main-header">
+        <div class="header-overlay"></div>
+        <div class="logo-area">
+
+    <div class="logo-area">
+    <div class="header-actions-top">
+    
+        <a href="about.html" id="notificationsBtn" class="notification-btn" title="مقدم من برمجيات QB" style="text-decoration: none;">
+                <img src="../ico/QB-Sentinel-Logo.ico" alt="QB Sentinel" class="logo-QB">
+                </a>
+
+        <button id="refreshApp" class="refresh-btn" title="تحديث النظام">
+            <i data-lucide="refresh-cw"></i>
+        </button>
+    </div>
+
+            <img src="../ico/logo.ico" alt="Logo" class="logo">
+            <h1>سجل تنظيف المعدات</h1>
+            <p class="en-sub-header">EQUIPMENT CLEANING LOG</p>
+        </div>
+    </header>
+
+    
+
+    <form id="cleaningReportForm" novalidate>
+        <div class="card info-card">
+            <p class="description">أداة رقابية لتوثيق عمليات النظافة الدورية للمعدات، تهدف إلى ضمان أعلى مستويات السلامة الغذائية والالتزام بالمعايير التشغيلية</p>
+            <p class="description en-text"></p>
+            <div class="required-indicator"></div>
+        </div>
+
+            <div class="back-nav">
+    <a href="../index.html" class="back-btn">
+        <i data-lucide="arrow-right"></i>
+        <span>العودة للقائمة الرئيسية</span>
+        <small>Return</small>
+    </a>
+   </div>
+
+        <div class="card" id="branchCard">
+            <label class="label-heading">اختيار الفرع / Select Branch <span class="required">*</span></label>
+            <div class="branch-grid">
+                <input type="radio" id="branch1" name="branch" value="Dawadimi" required>
+                <label for="branch1" class="branch-tile">
+                    <i data-lucide="map-pin"></i>
+                    <div class="tile-text">
+                        <span>الدوادمي</span>
+                        <small>Al-Dawadimi</small>
+                    </div>
+                </label>
+
+                <input type="radio" id="branch2" name="branch" value="Muzahmiyah">
+                <label for="branch2" class="branch-tile">
+                    <i data-lucide="map-pin"></i>
+                    <div class="tile-text">
+                        <span>المزاحمية</span>
+                        <small>Al-Muzahmiyah</small>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+         <!-- بطاقة الجلسة الحالية -->
+        <div id="savedInfo" class="card hidden">
+            <label class="label-heading">معلومات الموظف / Employee Information</label>
+            <div class="user-badge">
+                <div class="badge-icon">
+                    <i data-lucide="user-check"></i>
+                </div>
+                <div class="badge-details">
+                    <span id="displayUser" class="badge-name"></span>
+                    <small id="displayBranch" class="badge-branch"></small>
+                </div>
+            </div>
+            <button type="button" id="resetBtn" class="reset-link">
+                <i data-lucide="refresh-cw"></i>
+                تغيير / Change
+            </button>
+        </div>
+
+        <div class="card" id="employeeCard">
+            <label class="label-heading">تم التنظيف بواسطة / Cleaned By <span class="required">*</span></label>
+            <div id="employeeGrid" class="branch-grid">
+                        <span>يرجى اختيار الفرع </span>
+                        <small>Please select the branch</small>
+            </div>
+        </div>
+
+        <div class="card" id="idCard">
+            <label class="label-heading">رقم الموظف للتحقق / Employee ID <span class="required">*</span></label>
+            <div class="modern-input">
+                <i data-lucide="hash"></i>
+                <input type="number" id="employeeId" placeholder="ID Number" required>
+            </div>
+        </div>
+
+       
+
+        <div class="card" id="equipmentCard">
+    <label class="label-heading">الجهاز التي تم تنظيفه / Equipment <span class="required">*</span></label>
+    <p class="eq-hint">اختر قسماً لعرض الأجهزة</p>
+
+    <!-- القسم 1: أجهزة الآيس كريم -->
+    <div class="accordion-group" id="acc-icecream">
+        <button type="button" class="accordion-header" data-target="acc-body-icecream">
+            <div class="acc-header-right">
+                <div class="acc-icon-wrap acc-icon-icecream">
+                    <i data-lucide="ice-cream-2"></i>
+                </div>
+                <div class="acc-titles">
+                    <span class="acc-title-ar">أجهزة الآيس كريم</span>
+                    <span class="acc-title-en">Ice Cream Machines</span>
+                </div>
+            </div>
+            <div class="acc-header-left">
+                <span class="acc-count">2 أجهزة</span>
+                <i data-lucide="chevron-down" class="acc-chevron"></i>
+            </div>
+        </button>
+        <div class="accordion-body" id="acc-body-icecream">
+            <div class="check-group">
+                <label class="check-tile">
+                    <input type="radio" name="equipment" value="Ice cream machine #1" data-id="EQ-101" required>
+                    <div class="check-content"><span>ماكينة آيس كريم #1</span><small>Ice cream machine #1</small></div>
+                    <div class="freq-badge freq-3days"><span class="freq-ar">كل 3 أيام</span><span class="freq-en">Every 3 days</span></div>
+                </label>
+                <label class="check-tile">
+                    <input type="radio" name="equipment" value="Ice cream machine #2" data-id="EQ-102">
+                    <div class="check-content"><span>ماكينة آيس كريم #2</span><small>Ice cream machine #2</small></div>
+                    <div class="freq-badge freq-3days"><span class="freq-ar">كل 3 أيام</span><span class="freq-en">Every 3 days</span></div>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- القسم 2: أجهزة الحلويات -->
+    <div class="accordion-group" id="acc-sweets">
+        <button type="button" class="accordion-header" data-target="acc-body-sweets">
+            <div class="acc-header-right">
+                <div class="acc-icon-wrap acc-icon-sweets">
+                    <i data-lucide="cake"></i>
+                </div>
+                <div class="acc-titles">
+                    <span class="acc-title-ar">أجهزة الحلويات</span>
+                    <span class="acc-title-en">Sweets Machines</span>
+                </div>
+            </div>
+            <div class="acc-header-left">
+                <span class="acc-count">4 أجهزة</span>
+                <i data-lucide="chevron-down" class="acc-chevron"></i>
+            </div>
+        </button>
+        <div class="accordion-body" id="acc-body-sweets">
+            <div class="check-group">
+                <label class="check-tile">
+                    <input type="radio" name="equipment" value="Mini pancake machine" data-id="EQ-103">
+                    <div class="check-content"><span>ماكينة الميني بان كيك</span><small>Mini pancake machine</small></div>
+                    <div class="freq-badge freq-onuse"><span class="freq-ar">عند الاستخدام</span><span class="freq-en">After each use</span></div>
+                </label>
+                <label class="check-tile">
+                    <input type="radio" name="equipment" value="waffle maker" data-id="EQ-104">
+                    <div class="check-content"><span>ماكينة الوافل</span><small>Waffle maker</small></div>
+                    <div class="freq-badge freq-onuse"><span class="freq-ar">عند الاستخدام</span><span class="freq-en">After each use</span></div>
+                </label>
+                <label class="check-tile">
+                    <input type="radio" name="equipment" value="pancake machine" data-id="EQ-105">
+                    <div class="check-content"><span>ماكينة البان كيك</span><small>Pancake machine</small></div>
+                    <div class="freq-badge freq-onuse"><span class="freq-ar">عند الاستخدام</span><span class="freq-en">After each use</span></div>
+                </label>
+                <label class="check-tile">
+                    <input type="radio" name="equipment" value="Sauce warmer" data-id="EQ-108">
+                    <div class="check-content"><span>ماكينة تسخين الصوصات</span><small>Sauce warmer</small></div>
+                    <div class="freq-badge freq-needed"><span class="freq-ar">عند الحاجة</span><span class="freq-en">As needed</span></div>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- القسم 3: أجهزة العصير -->
+    <div class="accordion-group" id="acc-juice">
+        <button type="button" class="accordion-header" data-target="acc-body-juice">
+            <div class="acc-header-right">
+                <div class="acc-icon-wrap acc-icon-juice">
+                    <i data-lucide="citrus"></i>
+                </div>
+                <div class="acc-titles">
+                    <span class="acc-title-ar">أجهزة العصير</span>
+                    <span class="acc-title-en">Juice Machines</span>
+                </div>
+            </div>
+            <div class="acc-header-left">
+                <span class="acc-count">2 أجهزة</span>
+                <i data-lucide="chevron-down" class="acc-chevron"></i>
+            </div>
+        </button>
+        <div class="accordion-body" id="acc-body-juice">
+            <div class="check-group">
+                <label class="check-tile">
+                    <input type="radio" name="equipment" value="Orange juice machine" data-id="EQ-106">
+                    <div class="check-content"><span>ماكينة عصر البرتقال</span><small>Orange juice machine</small></div>
+                    <div class="freq-badge freq-daily"><span class="freq-ar">مدار اليوم</span><span class="freq-en">Throughout day</span></div>
+                </label>
+                <label class="check-tile">
+                    <input type="radio" name="equipment" value="Beetroot juicer" data-id="EQ-107">
+                    <div class="check-content"><span>ماكينة عصر الشمندر</span><small>Beetroot juicer</small></div>
+                    <div class="freq-badge freq-daily"><span class="freq-ar">مدار اليوم</span><span class="freq-en">Throughout day</span></div>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- القسم 4: التبريد -->
+    <div class="accordion-group" id="acc-cooling">
+        <button type="button" class="accordion-header" data-target="acc-body-cooling">
+            <div class="acc-header-right">
+                <div class="acc-icon-wrap acc-icon-cooling">
+                    <i data-lucide="snowflake"></i>
+                </div>
+                <div class="acc-titles">
+                    <span class="acc-title-ar">قسم التبريد</span>
+                    <span class="acc-title-en">Refrigeration</span>
+                </div>
+            </div>
+            <div class="acc-header-left">
+                <span class="acc-count">4 أجهزة</span>
+                <i data-lucide="chevron-down" class="acc-chevron"></i>
+            </div>
+        </button>
+        <div class="accordion-body" id="acc-body-cooling">
+            <div class="check-group">
+                <label class="check-tile">
+                    <input type="radio" name="equipment" value="Large fruit refrigerator" data-id="EQ-115">
+                    <div class="check-content"><span>ثلاجة الفواكه الكبيرة</span><small>Large fruit refrigerator</small></div>
+                    <div class="freq-badge freq-5days"><span class="freq-ar">كل 7 أيام</span><span class="freq-en">Every 7 days</span></div>
+                </label>
+                <label class="check-tile">
+                    <input type="radio" name="equipment" value="Secondary mini-fridge" data-id="EQ-116">
+                    <div class="check-content"><span>الثلاجة الثانوية الصغيرة</span><small>Secondary mini-fridge</small></div>
+                    <div class="freq-badge freq-5days"><span class="freq-ar">كل 7 أيام</span><span class="freq-en">Every 7 days</span></div>
+                </label>
+                <label class="check-tile">
+                    <input type="radio" name="equipment" value="Ice maker machine" data-id="EQ-119">
+                    <div class="check-content"><span>ماكينة تصنيع الثلج</span><small>Ice maker machine</small></div>
+                    <div class="freq-badge freq-5days"><span class="freq-ar">كل 7 أيام</span><span class="freq-en">Every 7 days</span></div>
+                </label>
+                <label class="check-tile">
+                    <input type="radio" name="equipment" value="Freezers (1, 2, ...)" data-id="EQ-117">
+                    <div class="check-content"><span>الفريزرات ( 1 ، 2 ، إلخ )</span><small>Freezers (1, 2, etc.)</small></div>
+                    <div class="freq-badge freq-5days"><span class="freq-ar">كل 7 أيام</span><span class="freq-en">Every 7 days</span></div>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- القسم 5: أجهزة المحل -->
+    <div class="accordion-group" id="acc-shop">
+        <button type="button" class="accordion-header" data-target="acc-body-shop">
+            <div class="acc-header-right">
+                <div class="acc-icon-wrap acc-icon-shop">
+                    <i data-lucide="store"></i>
+                </div>
+                <div class="acc-titles">
+                    <span class="acc-title-ar">أجهزة المحل</span>
+                    <span class="acc-title-en">Shop Appliances</span>
+                </div>
+            </div>
+            <div class="acc-header-left">
+                <span class="acc-count">2 أجهزة</span>
+                <i data-lucide="chevron-down" class="acc-chevron"></i>
+            </div>
+        </button>
+        <div class="accordion-body" id="acc-body-shop">
+            <div class="check-group">
+                <label class="check-tile">
+                    <input type="radio" name="equipment" value="kitchen air conditioner" data-id="EQ-110">
+                    <div class="check-content"><span>القزاز الامامي للمحل</span><small>The Front Glass of The Shop</small></div>
+                    <div class="freq-badge freq-daily"><span class="freq-ar">كل أيام</span><span class="freq-en">Every days</span></div>
+                </label>
+                <label class="check-tile">
+                    <input type="radio" name="equipment" value="Preparation Area Refrigerators" data-id="EQ-120">
+                    <div class="check-content"><span>ثلاجات منطقه التحضير</span><small>Preparation Area Refrigerators</small></div>
+                    <div class="freq-badge freq-3days"><span class="freq-ar">كل 3 أيام</span><span class="freq-en">Every 3 days</span></div>
+                </label>
+                <label class="check-tile">
+                    <input type="radio" name="equipment" value="Shop hall air conditioner" data-id="EQ-109">
+                    <div class="check-content"><span>مكيف صالة المحل</span><small>Shop hall air conditioner</small></div>
+                    <div class="freq-badge freq-7days"><span class="freq-ar">كل 14 أيام</span><span class="freq-en">Every 14 days</span></div>
+                </label>
+                <label class="check-tile">
+                    <input type="radio" name="equipment" value="kitchen air conditioner" data-id="EQ-110">
+                    <div class="check-content"><span>مكيف المطبخ</span><small>Kitchen air conditioner</small></div>
+                    <div class="freq-badge freq-7days"><span class="freq-ar">كل 14 أيام</span><span class="freq-en">Every 14 days</span></div>
+                </label>
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- القسم 6: عبوات الصوص -->
+    <div class="accordion-group" id="acc-containers">
+        <button type="button" class="accordion-header" data-target="acc-body-containers">
+            <div class="acc-header-right">
+                <div class="acc-icon-wrap acc-icon-containers">
+                    <i data-lucide="package"></i>
+                </div>
+                <div class="acc-titles">
+                    <span class="acc-title-ar">عبوات الصوص</span>
+                    <span class="acc-title-en">Sauce Containers</span>
+                </div>
+            </div>
+            <div class="acc-header-left">
+                <span class="acc-count">4 عبوات</span>
+                <i data-lucide="chevron-down" class="acc-chevron"></i>
+            </div>
+        </button>
+        <div class="accordion-body" id="acc-body-containers">
+            <div class="check-group">
+                <label class="check-tile">
+                    <input type="radio" name="equipment" value="Sauce container lids" data-id="EQ-118">
+                    <div class="check-content"><span>اغطيه علب الصوصات</span><small>Sauce Container Lids</small></div>
+                    <div class="freq-badge freq-3days"><span class="freq-ar">كل 3 أيام</span><span class="freq-en">Daily</span></div>
+                </label>
+                <label class="check-tile">
+                    <input type="radio" name="equipment" value="Pistachio, Nutella, Iotus" data-id="EQ-111">
+                    <div class="check-content"><span>بستاشيو ، نوتيلا ، لوتس</span><small>Pistachio, Nutella, Iotus</small></div>
+                    <div class="freq-badge freq-7days"><span class="freq-ar">كل 7 أيام</span><span class="freq-en">Daily</span></div>
+                </label>
+                <label class="check-tile">
+                    <input type="radio" name="equipment" value="Dark Chocolate, White Chocolate" data-id="EQ-112">
+                    <div class="check-content"><span>شوكولاته داكنة ، شوكولاته بيضاء</span><small>Dark Chocolate, White</small></div>
+                    <div class="freq-badge freq-7days"><span class="freq-ar">كل 7 أيام</span><span class="freq-en">Daily</span></div>
+                </label>
+                <label class="check-tile">
+                    <input type="radio" name="equipment" value="Kinder, Ferrero Rocher, Oreo" data-id="EQ-113">
+                    <div class="check-content"><span>كندر ، فيروشيه ، أوريو</span><small>Kinder, Ferrero Rocher, Oreo</small></div>
+                    <div class="freq-badge freq-7days"><span class="freq-ar">كل 7 أيام</span><span class="freq-en">Daily</span></div>
+                </label>
+                <label class="check-tile">
+                    <input type="radio" name="equipment" value="Containers : Syrup" data-id="EQ-114">
+                    <div class="check-content"><span>السيروب</span><small>Syrup</small></div>
+                    <div class="freq-badge freq-7days"><span class="freq-ar">كل 7 أيام</span><span class="freq-en">Daily</span></div>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- مؤشر الجهاز المختار -->
+    <div id="selectedEquipmentBanner" class="selected-eq-banner hidden">
+        <i data-lucide="check-circle-2"></i>
+        <div class="selected-eq-info">
+            <span id="selectedEqAr">—</span>
+            <small id="selectedEqEn">—</small>
+        </div>
+        <span id="selectedEqId" class="selected-eq-id">—</span>
+    </div>
+</div>
+
+        <div class="card" id="photoCard">
+            <label class="label-heading">التوثيق بالصورة / Photo Evidence <span class="required">*</span></label>
+            <div class="camera-wrapper">
+                <!-- زر فتح الكاميرا المباشرة — بدون input file -->
+                <div class="camera-trigger" id="dropArea">
+                    <div class="icon-circle">
+                        <i data-lucide="camera"></i>
+                    </div>
+                    <p>التقط صورة الآن</p>
+                    <small>Live Camera • No Gallery</small>
+                </div>
+                
+                <div id="imagePreviewContainer" class="hidden">
+                    <div class="preview-frame">
+                        <img id="imagePreview" src="" alt="Preview">
+                        <button type="button" id="removeImage" class="remove-overlay">
+                            <i data-lucide="x-circle"></i> حذف وإعادة التصوير
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button type="submit" class="submit-btn" id="submitBtn">
+                <span class="btn-content">
+                    <i data-lucide="check-circle"></i>
+                    إرسال التقرير / Submit
+                </span>
+            </button>
+        </div>
+    </form>
+</div>
+
+<footer class="developer-footer">
+    <div class="dev-card">
+        <div class="dev-card-content">
+            <div class="dev-header">
+                <i data-lucide="code-2" class="dev-icon"></i>
+                <span class="project-name">QB-Sentinel</span>
+            </div>
+            <p class="dev-text">
+                 التطوير <strong>بلال الخواجة</strong> 
+                <span class="brand-text">من ضمن برمجيات QB</span>
+            </p>
+            <div class="client-info">
+                <i data-lucide="warehouse" class="client-icon"></i>
+                <span>مقدم إلى عصير تايم (الدوادمي & المزاحمية)</span>
+            </div>
+            <div class="version-badge">
+                <span class="version-label">Version</span>
+                <span class="version-number">v0.0.0 </span>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- ترتيب التحميل مهم: camera أولاً ثم script -->
+<script src="../js/config.js"></script>
+<script src="../js/endpoints.js"></script>
+<script src="../js/session.js"></script>
+<script src="../js/common.js"></script>
+<script src="../reports/ECL/ECL-camera.js"></script>
+<script src="../reports/ECL/ECL-script.js"></script>
+<script src="../js/versions.js"></script>
+
+<script>lucide.createIcons();</script>
+</body>
+</html>

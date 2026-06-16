@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>طلب عهدة | PCR</title>
+    <link rel="stylesheet" href="../reports/PCR/PCR-style.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="icon" type="image/x-icon" href="../ico/logo.ico">
+</head>
+<body>
+
+<div id="customModal" class="modal-overlay hidden">
+    <div class="modal-content">
+        <div id="modalIcon" class="modal-icon"></div>
+        <h3 id="modalTitle"></h3>
+        <p id="modalMessage"></p>
+        <div id="modalLoader" class="modal-loader hidden"></div>
+        <button id="modalClose" class="modal-btn hidden">موافق / OK</button>
+    </div>
+</div>
+
+<div class="form-container">
+    <header class="main-header">
+        <div class="header-overlay"></div>
+        <div class="logo-area">
+            <div class="header-actions-top">
+                <a href="../about.html" id="notificationsBtn" class="notification-btn" title="مقدم من برمجيات QB" style="text-decoration: none;">
+                    <img src="../ico/QB-Sentinel-Logo.ico" alt="QB Sentinel" class="logo-QB">
+                </a>
+                <button id="refreshApp" class="refresh-btn" title="تحديث النظام">
+                    <i data-lucide="refresh-cw"></i>
+                </button>
+            </div>
+
+            <img src="../ico/logo.ico" alt="Logo" class="logo">
+            <h1>طلب عهدة</h1>
+            <p class="en-sub-header">PETTY CASH REQUEST</p>
+        </div>
+    </header>
+
+    <form id="pcrForm" novalidate>
+        <div class="card info-card">
+            <p class="description">أداة رقابية لتوثيق طلبات صرف العهد النقدية وتتبعها بشكل منظم ومؤمّن.</p>
+            <div class="required-indicator"></div>
+        </div>
+
+        <div class="back-nav">
+            <a href="../index.html" class="back-btn">
+                <i data-lucide="arrow-right"></i>
+                <span>العودة للقائمة الرئيسية</span>
+                <small>Return</small>
+            </a>
+        </div>
+
+        <!-- اختيار الفرع -->
+        <div class="card" id="branchCard">
+            <label class="label-heading">اختيار الفرع / Select Branch <span class="required">*</span></label>
+            <div class="branch-grid">
+                <input type="radio" id="branch1" name="branch" value="Dawadimi" required>
+                <label for="branch1" class="branch-tile">
+                    <i data-lucide="map-pin"></i>
+                    <div class="tile-text">
+                        <span>الدوادمي</span>
+                        <small>Al-Dawadimi</small>
+                    </div>
+                </label>
+
+                <input type="radio" id="branch2" name="branch" value="Muzahmiyah">
+                <label for="branch2" class="branch-tile">
+                    <i data-lucide="map-pin"></i>
+                    <div class="tile-text">
+                        <span>المزاحمية</span>
+                        <small>Al-Muzahmiyah</small>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <!-- رقم الموظف -->
+        <div class="card" id="idCard">
+            <label class="label-heading">رقم الموظف للتحقق / Employee ID <span class="required">*</span></label>
+            <div class="modern-input">
+                <i data-lucide="hash"></i>
+                <input type="number" id="employeeId" placeholder="ID Number" lang="en" required>
+            </div>
+        </div>
+
+        <!-- بطاقة الجلسة -->
+        <div id="savedInfo" class="card hidden">
+            <label class="label-heading">معلومات الموظف / Employee Information</label>
+            <div class="user-badge">
+                <div class="badge-icon">
+                    <i data-lucide="user-check"></i>
+                </div>
+                <div class="badge-details">
+                    <span id="displayUser" class="badge-name"></span>
+                    <small id="displayBranch" class="badge-branch"></small>
+                </div>
+            </div>
+            <button type="button" id="resetBtn" class="reset-link">
+                <i data-lucide="refresh-cw"></i>
+                تغيير / Change
+            </button>
+        </div>
+
+        <!-- مبلغ العهدة الحالي -->
+        <div class="card" id="currentAmountCard">
+            <label class="label-heading">مبلغ العهدة الحالي / Current Custody Amount <span class="required">*</span></label>
+            <div class="modern-input">
+                <i data-lucide="wallet"></i>
+                <input type="text" inputmode="numeric" pattern="[0-9]*" id="currentAmount" placeholder="0.00" lang="en" required>
+            </div>
+        </div>
+
+        <!-- المبلغ المطلوب مع أزرار الاختيار السريع -->
+        <div class="card" id="requestedAmountCard">
+            <label class="label-heading">المبلغ المطلوب / Requested Amount <span class="required">*</span></label>
+
+            <div class="quick-amounts">
+                <span class="quick-label">اختيار سريع</span>
+                <div class="quick-btns">
+                    <button type="button" class="quick-btn" data-amount="500">500 ر.س</button>
+                    <button type="button" class="quick-btn" data-amount="1000">1,000 ر.س</button>
+                    <button type="button" class="quick-btn" data-amount="1500">1,500 ر.س</button>
+                </div>
+            </div>
+
+            <div class="modern-input" style="margin-top: 12px;">
+                <i data-lucide="banknote"></i>
+                <input type="text" inputmode="numeric" pattern="[0-9]*" id="requestedAmount" placeholder="0.00" lang="en" required>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button type="submit" class="submit-btn" id="submitBtn">
+                <span class="btn-content">
+                    <i data-lucide="send"></i>
+                    إرسال الطلب / Submit
+                </span>
+            </button>
+        </div>
+    </form>
+</div>
+
+<footer class="developer-footer">
+    <div class="dev-card">
+        <div class="dev-card-content">
+            <div class="dev-header">
+                <i data-lucide="code-2" class="dev-icon"></i>
+                <span class="project-name">QB-Sentinel</span>
+            </div>
+            <p class="dev-text">
+                التطوير <strong>بلال الخواجة</strong>
+                <span class="brand-text">من ضمن برمجيات QB</span>
+            </p>
+            <div class="client-info">
+                <i data-lucide="warehouse" class="client-icon"></i>
+                <span>مقدم إلى عصير تايم (الدوادمي & المزاحمية)</span>
+            </div>
+            <div class="version-badge">
+                <span class="version-label">Version</span>
+                <span class="version-number">v0.0.0</span>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="../js/config.js"></script>
+<script src="../js/endpoints.js"></script>
+<script src="../js/session.js"></script>
+<script src="../js/common.js"></script>
+<script src="../reports/PCR/PCR-script.js"></script>
+<script src="../js/versions.js"></script>
+<script>lucide.createIcons();</script>
+</body>
+</html>

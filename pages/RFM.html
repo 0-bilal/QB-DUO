@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>طلب توريد مواد | RFM</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../reports/RFM/RFM-style.css">
+    <link rel="icon" type="image/x-icon" href="../ico/logo.ico">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- CryptoJS AES-256 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+</head>
+<body>
+
+    <!-- ===== MODAL ===== -->
+    <div id="customModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div id="modalIcon" class="modal-icon"></div>
+            <h3 id="modalTitle"></h3>
+            <div id="modalMessage" class="modal-message"></div>
+            <div id="modalLoader" class="modal-loader hidden"></div>
+            <button id="modalClose" class="modal-btn hidden">موافق / OK</button>
+        </div>
+    </div>
+
+    <div class="form-container">
+
+        <!-- ===== HEADER ===== -->
+        <header class="main-header">
+            <div class="header-overlay"></div>
+            <div class="logo-area">
+                <div class="header-actions-top">
+                    <a href="../about.html" id="notificationsBtn" class="notification-btn"
+                       title="مقدم من برمجيات QB" style="text-decoration: none;">
+                        <img src="../ico/QB-Sentinel-Logo.ico" alt="QB Sentinel" class="logo-QB">
+                    </a>
+                    <button id="refreshApp" class="refresh-btn" title="تحديث النظام">
+                        <i data-lucide="refresh-cw"></i>
+                    </button>
+                </div>
+                <img src="../ico/logo.ico" alt="Logo" class="logo">
+                <h1>طلب توريد مواد</h1>
+                <p class="en-sub-header">REQUEST FOR MATERIALS</p>
+            </div>
+        </header>
+
+        <form id="rfmForm" novalidate>
+
+            <!-- Info Card -->
+            <div class="card info-card">
+                <p class="description">
+                    أداة لطلب توريد المواد اللازمة للفرع من المورد المحدد،
+                    حدّد المواد المطلوبة وأدخل الكميات الحالية والمطلوبة ثم أرسل الطلب.
+                </p>
+            </div>
+
+            <!-- Back Nav -->
+            <div class="back-nav">
+                <a href="../index.html" class="back-btn">
+                    <i data-lucide="arrow-right"></i>
+                    <span>العودة للقائمة الرئيسية</span>
+                    <small>Return</small>
+                </a>
+            </div>
+
+            <!-- ===== BRANCH ===== -->
+            <div class="card" id="branchCard">
+                <label class="label-heading">
+                    اختيار الفرع / Select Branch <span class="required">*</span>
+                </label>
+                <div class="branch-grid">
+                    <input type="radio" id="branch1" name="branch" value="Dawadimi" required>
+                    <label for="branch1" class="branch-tile">
+                        <i data-lucide="map-pin"></i>
+                        <div class="tile-text">
+                            <span>الدوادمي</span>
+                            <small>Al-Dawadimi</small>
+                        </div>
+                    </label>
+
+                    <input type="radio" id="branch2" name="branch" value="Muzahmiyah">
+                    <label for="branch2" class="branch-tile">
+                        <i data-lucide="map-pin"></i>
+                        <div class="tile-text">
+                            <span>المزاحمية</span>
+                            <small>Al-Muzahmiyah</small>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- ===== EMPLOYEE ID ===== -->
+            <div class="card" id="idCard">
+                <label class="label-heading">
+                    رقم الموظف للتحقق / Employee ID <span class="required">*</span>
+                </label>
+                <div class="modern-input">
+                    <i data-lucide="hash"></i>
+                    <input type="number" id="employeeId" placeholder="ID Number" required>
+                </div>
+            </div>
+
+            <!-- بطاقة الجلسة الحالية -->
+            <div id="savedInfo" class="card hidden">
+                <label class="label-heading">معلومات الموظف / Employee Information</label>
+                <div class="user-badge">
+                    <div class="badge-icon">
+                        <i data-lucide="user-check"></i>
+                    </div>
+                    <div class="badge-details">
+                        <span id="displayUser" class="badge-name"></span>
+                        <small id="displayBranch" class="badge-branch"></small>
+                    </div>
+                </div>
+                <button type="button" id="resetBtn" class="reset-link">
+                    <i data-lucide="refresh-cw"></i>
+                    تغيير / Change
+                </button>
+            </div>
+
+            <!-- ===== قسم المواد ===== -->
+            <div class="card" id="materialsCard" style="display:none;">
+                <div class="mat-section-header">
+                    <div class="mat-section-title">
+                        <span>اختر المواد المطلوبة / Select Materials</span>
+                        <small>REQUEST FOR MATERIALS</small>
+                    </div>
+                    <span class="mat-count-badge" id="selectedCount">0 محدد</span>
+                </div>
+
+                <!-- حالة التحميل -->
+                <div id="matLoader" class="materials-loader">
+                    <div class="mat-spinner"></div>
+                    <p>جارٍ تحميل قائمة المواد...</p>
+                    <small>Loading materials list</small>
+                </div>
+
+                <!-- حالة الخطأ -->
+                <div id="matError" class="materials-empty hidden">
+                    <i data-lucide="alert-circle"></i>
+                    <p>تعذّر تحميل قائمة المواد</p>
+                    <small>Failed to load materials</small>
+                    <button type="button" class="retry-btn" id="retryBtn">
+                        <i data-lucide="refresh-cw"></i>
+                        إعادة المحاولة
+                    </button>
+                </div>
+
+                <!-- حالة الفارغة -->
+                <div id="matEmpty" class="materials-empty hidden">
+                    <i data-lucide="package-x"></i>
+                    <p>لا توجد مواد مضافة لهذا الفرع</p>
+                    <small>No materials found for this branch</small>
+                </div>
+
+                
+
+                <!-- شبكة البطاقات -->
+                <div id="matGrid" class="mat-grid hidden"></div>
+
+
+
+                <!-- ملخص الطلب -->
+                <div id="rfmSummary" class="rfm-summary-banner hidden">
+                    <div class="rfm-summary-head">
+                        <i data-lucide="clipboard-list"></i>
+                        <span>ملخص الطلب</span>
+                    </div>
+                    <div id="rfmSummaryList" class="rfm-summary-list"></div> 
+                </div>
+            </div><!-- /#materialsCard -->
+
+
+
+            
+            <!-- ===== زر الإرسال ===== -->
+            <div class="actions" id="submitArea" style="display:none;">
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <span class="btn-content">
+                        <i data-lucide="send"></i>
+                        إرسال طلب التوريد / Submit Request
+                    </span>
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="developer-footer">
+        <div class="dev-card">
+            <div class="dev-card-content">
+                <div class="dev-header">
+                    <i data-lucide="code-2" class="dev-icon"></i>
+                    <span class="project-name">QB-Sentinel</span>
+                </div>
+                <p class="dev-text">
+                    التطوير <strong>بلال الخواجة</strong>
+                    <span class="brand-text">من ضمن برمجيات QB</span>
+                </p>
+                <div class="client-info">
+                    <i data-lucide="warehouse" class="client-icon"></i>
+                    <span>مقدم إلى عصير تايم (الدوادمي & المزاحمية)</span>
+                </div>
+                <div class="version-badge">
+                    <span class="version-label">Version</span>
+                    <span class="version-number">v1.0.0</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/endpoints.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/session.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../reports/RFM/RFM-script.js"></script>
+    <script src="../js/versions.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>
