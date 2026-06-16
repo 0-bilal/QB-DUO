@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>التقارير | QB-Sentinel</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="icon" type="image/x-icon" href="ico/QB-Sentinel-Logo.ico">
+    <link rel="icon" type="image/png" sizes="192x192" href="ico/QB-Sentinel-Logo.ico">
+    <link rel="apple-touch-icon" href="ico/QB-Sentinel-Logo.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="QB-Sentinel">
+    <meta name="theme-color" content="#c62828">
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('تم تفعيل نظام التطبيق بنجاح'))
+                    .catch(err => console.error('فشل تفعيل الـ Service Worker:', err));
+            });
+        }
+    </script>
+</head>
+<body>
+
+<div id="customModal" class="modal-overlay hidden">
+    <div class="modal-content">
+        <div id="modalIcon" class="modal-icon"></div>
+        <h3 id="modalTitle"></h3>
+        <p id="modalMessage"></p>
+        <div id="modalLoader" class="modal-loader hidden"></div>
+        <div id="modalProgressContainer" class="modal-progress-container hidden">
+            <div id="modalProgressBar" class="modal-progress-bar"></div>
+        </div>
+        <button id="modalClose" class="modal-btn hidden">موافق / OK</button>
+    </div>
+</div>
+
+<div class="form-container">
+    <header class="main-header">
+        <div class="header-overlay"></div>
+        <div class="logo-area">
+            <div class="header-actions-top">
+                <a href="about.html" id="notificationsBtn" class="notification-btn" title="مقدم من برمجيات QB" style="text-decoration: none;">
+                <img src="ico/QB-Sentinel-Logo.ico" alt="QB Sentinel" class="logo-QB">
+                </a>
+
+                <button id="refreshApp" class="refresh-btn" title="تحديث النظام">
+                    <i data-lucide="refresh-cw"></i>
+                </button>
+
+                
+            </div>
+            
+            <img src="ico/logo.ico" alt="Logo" class="logo">
+            <h1>ديو برجر</h1>
+            <p class="en-sub-header">DUO BURGER</p>
+        </div>
+    </header>
+
+    <div class="card info-card">
+        <p class="description">يُعتبر QB-Sentinel أداة تهدف إلى تعزيز معايير الجودة في العمليات التشغيلية لشركة DUO BURGER، وذلك من خلال التحول من النظام الورقي إلى نظام تقارير رقمية، ورفع كفاءة الرقابة التشغيلية.</p>
+        <a class="report-tag">مقدم من برمجيات QB</a>
+    </div>
+
+    <!-- ======================================================
+         القسم 1: شؤون الموظفين
+    ======================================================= -->
+    <div class="section-group open" data-section="staff">
+        <button class="section-header" onclick="toggleSection(this)">
+            <div class="section-header-right">
+                <div class="section-icon-wrap" style="background:#fff5f5;">
+                    <i data-lucide="users" style="color:#c62828;"></i>
+                </div>
+                <div class="section-title-block">
+                    <span class="section-title-ar">شؤون الموظفين</span>
+                    <span class="section-title-en">STAFF MANAGEMENT</span>
+                </div>
+            </div>
+            <div class="section-meta">
+                <span class="section-count">1</span>
+                <i data-lucide="chevron-up" class="section-chevron"></i>
+            </div>
+        </button>
+        <div class="section-body">
+            <div class="reports-grid">
+
+                <a href="pages/ATT.html" class="report-card">
+                    <div class="report-card-icon"><i data-lucide="user-check"></i></div>
+                    <div class="report-card-body">
+                        <h3>حضور وانصراف الموظفين</h3>
+                        <p>STAFF ATTENDANCE (IN/OUT)</p>
+                    </div>
+                    <div class="report-card-arrow"><i data-lucide="chevron-left"></i></div>
+                </a>
+
+                <!--
+                 <a href="pages/REM.html" class="report-card">
+                    <div class="report-card-icon"><i data-lucide="bell-ring"></i></div>
+                    <div class="report-card-body">
+                        <h3>تذكير تجديد الإقامات والعقود</h3>
+                        <p>ID & CONTRACT RENEWAL REMINDER</p>
+                    </div>
+                    <div class="report-card-arrow"><i data-lucide="chevron-left"></i></div>
+                </a>
+                -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================================
+         القسم 2: المنتجات والمخزون
+    ======================================================= -->
+    <!--
+    <div class="section-group open" data-section="products">
+        <button class="section-header" onclick="toggleSection(this)">
+            <div class="section-header-right">
+                <div class="section-icon-wrap" style="background:#fff5f5;">
+                    <i data-lucide="package" style="color:#c62828;"></i>
+                </div>
+                <div class="section-title-block">
+                    <span class="section-title-ar">المنتجات والمخزون</span>
+                    <span class="section-title-en">PRODUCTS & INVENTORY</span>
+                </div>
+            </div>
+            <div class="section-meta">
+                <span class="section-count">5</span>
+                <i data-lucide="chevron-up" class="section-chevron"></i>
+            </div>
+        </button>
+        <div class="section-body">
+            <div class="reports-grid">
+
+                <a href="pages/RFM.html" class="report-card">
+                    <div class="report-card-icon"><i data-lucide="truck"></i></div>
+                    <div class="report-card-body">
+                        <h3>طلب توريد مواد</h3>
+                        <p>REQUEST FOR MATERIALS (RFM)</p>
+                        <div class="tags-wrapper">
+                            <span class="tag-new">NEW</span>
+                        </div>
+                    </div>
+                    <div class="report-card-arrow"><i data-lucide="chevron-left"></i></div>
+                </a>
+
+                <a href="pages/FIL.html" class="report-card">
+                    <div class="report-card-icon"><i data-lucide="apple"></i></div>
+                    <div class="report-card-body">
+                        <h3>سجل فحص الفواكة</h3>
+                        <p>FRUIT INSPECTION LOG</p>
+                    </div>
+                    <div class="report-card-arrow"><i data-lucide="chevron-left"></i></div>
+                </a>
+
+                <a href="pages/RSL.html" class="report-card">
+                    <div class="report-card-icon"><i data-lucide="list-checks"></i></div>
+                    <div class="report-card-body">
+                        <h3>سجل معايرة المكونات</h3>
+                        <p>RECIPE STANDARDS LOG</p>
+                    </div>
+                    <div class="report-card-arrow"><i data-lucide="chevron-left"></i></div>
+                </a>
+
+                <a href="dev/PAL.html" class="report-card">
+                    <div class="report-card-icon"><i data-lucide="boxes"></i></div>
+                    <div class="report-card-body">
+                        <h3>متابعة توفر المنتجات</h3>
+                        <p>PRODUCT AVAILABILITY LOG</p>
+                        <div class="tags-wrapper">
+                            <span class="tag-beta">BETA</span>
+                        </div>
+                    </div>
+                    <div class="report-card-arrow"><i data-lucide="chevron-left"></i></div>
+                </a>
+
+                <a href="dev/PRR.html" class="report-card">
+                    <div class="report-card-icon"><i data-lucide="rotate-ccw"></i></div>
+                    <div class="report-card-body">
+                        <h3>طلب استرجاع منتجات</h3>
+                        <p>PRODUCT RETURN REQUEST</p>
+                        <div class="tags-wrapper">
+                            <span class="tag-dev">DEV</span>
+                        </div>
+                    </div>
+                    <div class="report-card-arrow"><i data-lucide="chevron-left"></i></div>
+                </a>
+
+
+            </div>
+        </div>
+    </div>
+
+    -->
+
+    <!-- ======================================================
+         القسم 3: العمليات التشغيلية
+    ======================================================= -->
+
+    <!--
+    <div class="section-group open" data-section="operations">
+        <button class="section-header" onclick="toggleSection(this)">
+            <div class="section-header-right">
+                <div class="section-icon-wrap" style="background:#fff5f5;">
+                    <i data-lucide="settings-2" style="color:#c62828;"></i>
+                </div>
+                <div class="section-title-block">
+                    <span class="section-title-ar">العمليات التشغيلية</span>
+                    <span class="section-title-en">DAILY OPERATIONS</span>
+                </div>
+            </div>
+            <div class="section-meta">
+                <span class="section-count">4</span>
+                <i data-lucide="chevron-up" class="section-chevron"></i>
+            </div>
+        </button>
+        <div class="section-body">
+            <div class="reports-grid">
+
+                <a href="pages/ECL.html" class="report-card">
+                    <div class="report-card-icon"><i data-lucide="refrigerator"></i></div>
+                    <div class="report-card-body">
+                        <h3>سجل تنظيف المعدات</h3>
+                        <p>EQUIPMENT CLEANING LOG</p>
+                    </div>
+                    <div class="report-card-arrow"><i data-lucide="chevron-left"></i></div>
+                </a>
+
+                <a href="pages/RMM.html" class="report-card">
+                    <div class="report-card-icon"><i data-lucide="bell-ring"></i></div>
+                    <div class="report-card-body">
+                        <h3>تصنيع المواد الأولية</h3>
+                        <p>RAW MATERIALS MANUFACTURING</p>
+                    </div>
+                    <div class="report-card-arrow"><i data-lucide="chevron-left"></i></div>
+                </a>
+
+                <a href="pages/EDR.html" class="report-card">
+                    <div class="report-card-icon"><i data-lucide="calendar-check"></i></div>
+                    <div class="report-card-body">
+                        <h3>تقرير نهاية اليوم</h3>
+                        <p>END OF DAY REPORT</p>
+                        <div class="tags-wrapper">
+                            <span class="tag-beta"></span>
+                        </div>
+                    </div>
+                    <div class="report-card-arrow"><i data-lucide="chevron-left"></i></div>
+                </a>
+
+                <a href="pages/MVR.html" class="report-card">
+                    <div class="report-card-icon"><i data-lucide="video"></i></div>
+                    <div class="report-card-body">
+                        <h3>مراجعة الفروع الشهرية</h3>
+                        <p>MONTHLY VIDEO REPORT</p>
+                        <div class="tags-wrapper">
+                            <span class="tag-beta"></span>
+                        </div>
+                    </div>
+                    <div class="report-card-arrow"><i data-lucide="chevron-left"></i></div>
+                </a>
+
+            </div>
+        </div>
+    </div>
+
+-->
+
+
+   
+    <!-- ======================================================
+         القسم 4: المالية
+    ======================================================= -->
+
+    <!--
+    <div class="section-group open" data-section="finance">
+        <button class="section-header" onclick="toggleSection(this)">
+            <div class="section-header-right">
+                <div class="section-icon-wrap" style="background:#fff5f5;">
+                    <i data-lucide="wallet" style="color:#c62828;"></i>
+                </div>
+                <div class="section-title-block">
+                    <span class="section-title-ar">الشؤون المالية</span>
+                    <span class="section-title-en">FINANCE</span>
+                </div>
+            </div>
+            <div class="section-meta">
+                <span class="section-count">2</span>
+                <i data-lucide="chevron-up" class="section-chevron"></i>
+            </div>
+        </button>
+        <div class="section-body">
+            <div class="reports-grid">
+
+                <a href="pages/CPV.html" class="report-card">
+                    <div class="report-card-icon"><i data-lucide="banknote"></i></div>
+                    <div class="report-card-body">
+                        <h3>سند صرف نقدية</h3>
+                        <p>CASH PAYMENT VOUCHER</p>
+                    </div>
+                    <div class="report-card-arrow"><i data-lucide="chevron-left"></i></div>
+                </a>
+
+                <a href="pages/PCR.html" class="report-card">
+                    <div class="report-card-icon"><i data-lucide="wallet"></i></div>
+                    <div class="report-card-body">
+                        <h3>طلب عهدة</h3>
+                        <p>PETTY CASH REQUEST</p>
+                    </div>
+                    <div class="report-card-arrow"><i data-lucide="chevron-left"></i></div>
+                </a>
+
+            </div>
+        </div>
+    </div>
+
+    -->
+
+    <footer class="developer-footer">
+        <div class="dev-card">
+            <div class="dev-card-content">
+                <div class="dev-header">
+                    <i data-lucide="code-2" class="dev-icon"></i>
+                    <span class="project-name">QB-Sentinel</span>
+                </div>
+                <p class="dev-text">
+                    التطوير <strong>بلال الخواجة</strong>
+                    <span class="brand-text">من ضمن برمجيات QB</span>
+                </p>
+                <div class="client-info">
+                    <i data-lucide="warehouse" class="client-icon"></i>
+                    <span>مقدم إلى ديو برجر ( DUO BURGER )</span>
+                </div>
+                <div class="version-badge">
+                    <span class="version-label">Version</span>
+                    <span class="version-number"></span>
+                </div>
+                <a href="about.html" class="about-system-btn">
+                    <i data-lucide="info"></i>
+                    <span>حول النظام</span>
+                    <i data-lucide="chevron-left" class="about-arrow"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/common.js"></script>
+<script src="js/script.js"></script>
+<script src="js/versions.js"></script>
+<script>lucide.createIcons();</script>
+</body>
+</html>

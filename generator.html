@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>الحضور والانصراف | QB-Sentinel</title>
+    <link rel="stylesheet" href="generator/generator-style.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="icon" type="image/x-icon" href="ico/QB-Sentinel-Logo.ico">
+
+
+
+<link rel="icon" type="image/png" sizes="192x192" href="ico/QB-Sentinel-Logo.ico">
+<link rel="apple-touch-icon" href="ico/QB-Sentinel-Logo.ico">
+
+<link rel="manifest" href="manifest.json">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="QB-Sentinel | ATT">
+<meta name="theme-color" content="#c62828">
+
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js')
+        .then(reg => console.log('تم تفعيل نظام التطبيق بنجاح'))
+        .catch(err => console.error('فشل تفعيل الـ Service Worker:', err));
+    });
+  }
+</script>
+
+</head>
+<body>
+
+    <!-- شاشة الإعداد الأولي -->
+    <div id="setupScreen" class="setup-overlay hidden">
+        <div class="setup-card">
+            <img src="ico/logo.ico" alt="Logo" class="setup-logo">
+            <i data-lucide="tablet-smartphone" class="setup-icon"></i>
+            <h2>إعداد جهاز جديد</h2>
+            <p>أدخل رقم تعريف الجهاز المخصص لهذا الفرع</p>
+            <small>Enter the device ID assigned to this branch</small>
+            <input type="text" id="deviceIdInput" placeholder="مثلاً: IPAD-DAW-01">
+            <button id="saveSetupBtn">
+                <i data-lucide="save"></i>
+                حفظ وإعداد الجهاز
+            </button>
+        </div>
+    </div>
+
+    <!-- الواجهة الرئيسية -->
+    <div class="main-screen">
+
+        <!-- شريط الرأس -->
+        <header class="top-bar">
+            <div class="top-bar-brand">
+                <img src="ico/logo-red.ico" alt="Logo" class="top-logo">
+                <div class="brand-text">
+                    <span class="brand-name">QB-Sentinel</span>
+                    
+                </div>
+            </div>
+            <div class="top-bar-meta">
+                <div class="time-display" id="timestamp">--:--:--</div>
+                <div id="connectionStatus" class="status-badge">
+                    <span id="deviceDisplay" class="branch-label">فرع: —</span>
+                    <span class="dot"></span>
+                    <span>متصل</span>
+
+                 
+                    
+                </div>
+            </div>
+        </header>
+
+        <!-- منطقة المحتوى الرئيسي -->
+        <main class="content-area">
+
+            <!-- منظر البطاقتين (الحالة الافتراضية) -->
+            <div id="selectionView" class="selection-view">
+                <p class="select-hint">اختر نوع العملية للمتابعة</p>
+                <div class="cards-grid">
+
+                    <!-- بطاقة الحضور -->
+                    <div class="action-card in" id="cardIn" onclick="activateMode('IN')">
+                        <div class="card-glow"></div>
+                        <div class="card-inner">
+                            <div class="card-icon-wrap in">
+                                <i data-lucide="log-in"></i>
+                            </div>
+                            <div class="card-labels">
+                                <span class="card-title">تسجيل حضور</span>
+                                <span class="card-sub">Check-In</span>
+                            </div>
+                            <div class="card-arrow">
+                                <i data-lucide="arrow-left"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- بطاقة الانصراف -->
+                    <div class="action-card out" id="cardOut" onclick="activateMode('OUT')">
+                        <div class="card-glow"></div>
+                        <div class="card-inner">
+                            <div class="card-icon-wrap out">
+                                <i data-lucide="log-out"></i>
+                            </div>
+                            <div class="card-labels">
+                                <span class="card-title">تسجيل انصراف</span>
+                                <span class="card-sub">Check-Out</span>
+                            </div>
+                            <div class="card-arrow">
+                                <i data-lucide="arrow-left"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- منظر الباركود (يظهر عند الاختيار) -->
+            <div id="qrView" class="qr-view hidden">
+
+                <div class="qr-mode-badge" id="qrModeBadge">
+                    <i data-lucide="log-in" id="qrModeIcon"></i>
+                    <span id="qrModeLabel">تسجيل حضور</span>
+                    <span id="qrModeSub">Check-In</span>
+                </div>
+
+                <div class="qr-card">
+                    <div id="qrContainer"></div>
+                    <div class="qr-scan-line"></div>
+                </div>
+
+                <div class="qr-footer">
+                    <p class="scan-hint">
+                        <i data-lucide="scan-line"></i>
+                        وجّه الكاميرا نحو الرمز لتسجيل العملية
+                    </p>
+                    <div class="timer-wrap">
+                        <span class="timer-label">تحديث تلقائي</span>
+                        <div id="timerBar" class="timer-progress">
+                            <div id="timerFill" class="timer-fill"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="back-btn" onclick="goBack()">
+                    <i data-lucide="arrow-right"></i>
+                    العودة / Back
+                </button>
+
+            </div>
+
+        </main>
+
+        <!-- تذييل -->
+        <footer class="bottom-bar">
+            <span class="footer-brand">برمجيات QB • بلال الخواجة</span>
+            <span class="version-number footer-version">v1.7.101</span>
+        </footer>
+
+    </div>
+
+<script src="generator/generator-script.js"></script>
+
+<script>lucide.createIcons();</script>
+</body>
+</html>
