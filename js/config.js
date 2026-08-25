@@ -30,13 +30,14 @@ window.QB = {
     branchEmployees: {
         
         "Shawqiyah": [
-            { ar: "بلال", en: "bilal"  },
+            
             { ar: "أوبو", en: "Oppo"   },
             { ar: "تميم",  en: "TAMIM"   },
             { ar: "ماهيم",  en: "MD Mahim"   },
             { ar: "حسين",  en: "Hossain "   },
             { ar: "سلمان",  en: "MD salman"   },
             { ar: "شميدول",  en: "shamidul"   },
+            { ar: "شاهين", en: "Shaheen"  },
             { ar: "هارون",  en: "harun "   }
         ]
     },
