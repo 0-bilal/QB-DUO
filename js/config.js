@@ -32,13 +32,12 @@ window.QB = {
         "Shawqiyah": [
             
             { ar: "أوبو", en: "Oppo"   },
-            { ar: "تميم",  en: "TAMIM"   },
-            { ar: "ماهيم",  en: "MD Mahim"   },
+            { ar: "تميم",  en: "Tamtm"   },
+            { ar: "ماهيم",  en: "Mahim"   },
             { ar: "حسين",  en: "Hossain "   },
-            { ar: "سلمان",  en: "MD salman"   },
-            { ar: "شميدول",  en: "shamidul"   },
+            { ar: "شميدول",  en: "Shamidul"   },
             { ar: "شاهين", en: "Shaheen"  },
-            { ar: "هارون",  en: "harun "   }
+            { ar: " شاني",  en: "Sany"   }
         ]
     },
 
